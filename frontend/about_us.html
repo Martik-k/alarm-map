@@ -2,25 +2,18 @@
 <html lang="en">
     <head>
         <title>Map</title>
-        <link rel="stylesheet" href="style_about_us.css" type="text/css" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='style_about_us.css') }}" type="text/css" />
         <script src="https://kit.fontawesome.com/11c8869e3c.js"></script>
     </head>
 
     <body>
         <header>
-            <nav>
-                <ul>
-                    <li><a href="#">Карта тривог</a></li>
-                    <li><a href="#">Аналітика</a></li>
-                    <li><a href="#">Медична допомога</a></li>
-                    <li><a class="onpage" href="#">Про нас</a></li>
-                </ul>
-            </nav>
+            {% include 'navbar.html' %}
         </header>
 
         <div class="team">
             <div class="member">
-                <img src="krasniukevych.jpg">
+                <img src="{{ url_for('static', filename='krasniukevych.jpg') }}">
                 <p class="name">Краснюкевич Марія</p>
                 <a class="linkedin" href="https://linkedin.com/in/mariya-krasniukevych-91786b353/">
                     <i class="fa-brands fa-linkedin"></i>
@@ -28,35 +21,35 @@
                 </a>
             </div>
             <div class="member">
-                <img src="kukurudza.jpg">
+                <img src="{{ url_for('static', filename='kukurudza.jpg') }}">
                 <p class="name">Кукурудза Вікторія</p>
                 <a class="linkedin" href="https://linkedin.com/in/viktoria-kukurudza-802868353/">
                 <i class="fa-brands fa-linkedin"></i>
                 Viktoria Kukurudza</a>            
             </div>
             <div class="member">
-                <img src="kosiv.jpg">
+                <img src="{{ url_for('static', filename='kosiv.jpg') }}">
                 <p class="name">Косів Марта</p>
                 <a class="linkedin" href="https://linkedin.com/">
                 <i class="fa-brands fa-linkedin"></i>
                 Marta Kosiv</a>            
             </div>
             <div class="member">
-                <img src="hadiichuk.jpg">
+                <img src="{{ url_for('static', filename='hadiichuk.jpg') }}">
                 <p class="name">Гадійчук Соломія</p>
                 <a class="linkedin" href="https://linkedin.com/in/solomiiagadiichuk-ba6518355/">
                 <i class="fa-brands fa-linkedin"></i>
                 Solomiia Gadiichuk</a>            
             </div>
             <div class="member">
-                <img src="piletska.jpg">
+                <img src="{{ url_for('static', filename='piletska.jpg') }}">
                 <p class="name">Пілецька Єізавета</p>
                 <a class="linkedin" href="https://linkedin.com/in/yelizaveta-piletska-2228a9355/">
                 <i class="fa-brands fa-linkedin"></i>
                 Yelizaveta Piletska</a>            
             </div>
             <div class="member">
-                <img src="lizenko.jpg">
+                <img src="{{ url_for('static', filename='lizenko.jpg') }}">
                 <p class="name">Лизенко Діана</p>
                 <a class="linkedin" href="https://linkedin.com/in/diana-lyzenko-651810355/">
                 <i class="fa-brands fa-linkedin"></i>
