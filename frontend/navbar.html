@@ -1,9 +1,12 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style_navigation_panel.css') }}">
 <div class="logo"></div>
-            <nav>
-                <ul>
-                    <li><a href="/alarm_map">Карта тривог</a></li>
-                    <li><a class="onpage" href="/analytics">Аналітика</a></li>
-                    <li><a href="#">Медична допомога</a></li>
-                    <li><a href="/about_us">Про нас</a></li>
-                </ul>
-            </nav>
+    <nav>
+        <ul>
+            <li><a class="{{ onpage_map }}", href="/alarm_map"><h3>Карта тривог</h3></a></li>
+            <li><a class="{{ onpage_analytics }}" href="/analytics"><h3>Аналітика</h3></a></li>
+            <li><a class="{{ onpage_help }}", href="#"><h3>Медична допомога</h3></a></li>
+            <li><a class="{{ onpage_us }}", href="/about_us"><h3>Про нас</h3></a></li>
+        </ul>
+    </nav>
+</div>
+
