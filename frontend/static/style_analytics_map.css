@@ -46,7 +46,7 @@ svg path {
 }
 
 .notdanger {
-  fill: #779e45;
+  fill: #A8B480;
 }
 
 svg path:hover {
@@ -111,7 +111,7 @@ svg path:hover {
   }
   
   .legend ul li span.notdanger {
-    background-color: #779e45;
+    background-color: #A8B480;
   }
 
   .region-label {
@@ -167,7 +167,7 @@ svg path:hover {
   position: fixed;
   top: 12%;
   right: 3%;
-  width: 250px;
+  width: 280px;
   background-color: #353930;
   padding: 15px;
   border-radius: 5px;
@@ -186,6 +186,7 @@ svg path:hover {
   opacity: 1;
   visibility: visible;
   display: block;
+  zoom: 1.4;
 }
 
 /* Стилі кнопки закриття */
@@ -219,7 +220,7 @@ svg path:hover {
 
 #selector label {
   color: white;
-  font-size: 14px;
+  font-size: 17px;
 }
 
 .zoom-controls {

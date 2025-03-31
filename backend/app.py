@@ -93,6 +93,8 @@ danger_data_1= {
     "Kyiv": "lessdanger",
     "Avtonomna Respublika Krym" : "lessdanger"
 }
+
+
 danger_data_2= {
     "Vinnytska": "notdanger",
     "Volynska": "danger",
@@ -122,10 +124,11 @@ danger_data_2= {
     "Avtonomna Respublika Krym" : "lessdanger"
 }
 
+
 @app.route("/")
 @app.route("/alarm_map")
 def home():
-    accure_time = datetime.now(timezone.utc).time()
+    accure_time = datetime.now().time()
     time = re.findall(r'..:..:..', f"{accure_time}")[0]
     return render_template("alarm_map.html", alarm_data=alarm_data_1, alarm_data_2=alarm_data_2, time=time, \
                            onpage_map='true', onpage_analytics='false', onpage_help='false', onpage_us='false')
