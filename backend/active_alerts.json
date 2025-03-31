@@ -1,0 +1,85 @@
+{
+    "alerts": [
+        {
+            "id": 8757,
+            "start": "2022-04-04T19:45:39+03:00",
+            "finish": null,
+            "type": "air_raid",
+            "location": "Луганська область",
+            "location_type": "oblast",
+            "details": null
+        },
+        {
+            "id": 28288,
+            "start": "2022-12-11T00:22:00+02:00",
+            "finish": null,
+            "type": "air_raid",
+            "location": "Автономна Республіка Крим",
+            "location_type": "oblast",
+            "details": "Згідно інформації з Офіційних карт тривог"
+        },
+        {
+            "id": 74845,
+            "start": "2024-05-12T11:37:29+03:00",
+            "finish": null,
+            "type": "air_raid",
+            "location": "Липецька територіальна громада",
+            "location_type": "hromada",
+            "details": null
+        },
+        {
+            "id": 74846,
+            "start": "2024-05-12T11:37:57+03:00",
+            "finish": null,
+            "type": "air_raid",
+            "location": "Вовчанська територіальна громада",
+            "location_type": "hromada",
+            "details": null
+        },
+        {
+            "id": 76016,
+            "start": "2024-05-20T12:31:37+03:00",
+            "finish": null,
+            "type": "artillery_shelling",
+            "location": "Вовчанська територіальна громада",
+            "location_type": "hromada",
+            "details": null
+        },
+        {
+            "id": 76017,
+            "start": "2024-05-20T12:31:41+03:00",
+            "finish": null,
+            "type": "urban_fights",
+            "location": "Вовчанська територіальна громада",
+            "location_type": "hromada",
+            "details": null
+        },
+        {
+            "id": 111607,
+            "start": "2025-03-31T13:09:19+03:00",
+            "finish": null,
+            "type": "artillery_shelling",
+            "location": "Покровська територіальна громада",
+            "location_type": "hromada",
+            "details": null
+        },
+        {
+            "id": 111618,
+            "start": "2025-03-31T16:56:30+03:00",
+            "finish": null,
+            "type": "artillery_shelling",
+            "location": "м. Нікополь",
+            "location_type": "city",
+            "details": null
+        },
+        {
+            "id": 111619,
+            "start": "2025-03-31T16:56:30+03:00",
+            "finish": null,
+            "type": "artillery_shelling",
+            "location": "Нікопольська територіальна громада",
+            "location_type": "hromada",
+            "details": null
+        }
+    ]
+}
