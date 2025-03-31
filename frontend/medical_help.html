@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Перша допомога</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='medical_page.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#">Карта тривог</a>
+            <a href="#">Аналітика</a>
+            <a href="#">Медична допомога</a>
+            <a href="#">Про нас</a>
+        </nav>
+        <div class="header-underline"></div>
+    </header>
+    <main>
+        <section class="container">
+            <div class="left">
+                <div class="margin-left">
+                    <img src="{{ url_for('static', filename='health.jpg') }}">
+                    <div class="transparent-box">
+                        <div></div>
+                        <div class="centered-text-container">
+                            <p class="centered-text"><strong>НЕ<br>ПАНІКУЙ –<br>ДІЙ</strong></p>
+                            <img src="{{ url_for('static', filename='bandage.png') }}" class="additional-image">
+                            <p class="additional-text1">Допомога поруч – і ти<br>можеш її надати.</p>
+                        </div>
+                        <div class="bottom-text-container">
+                            <p class="additional-text2">Швидко.</p>
+                            <p class="additional-text3">Чітко.</p>
+                            <p class="additional-text4">Ефективно.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-right">
+                <h1 class="section-title"><br>Алгоритм дій при наданні першої<br>
+                    допомоги</h1> 
+            
+                <div class="info-item">
+                    <img src="{{ url_for('static', filename='plus.png') }}" alt="Плюс">
+                    <p><strong>Оцінка ситуації</strong> – перш за все переконайтеся<br>
+                    у власній безпеці та визначте стан<br>
+                    постраждалого.</p>
+                </div>
+            
+                <div class="info-item">
+                    <img src="{{ url_for('static', filename='plus.png') }}" alt="Плюс">
+                    <p><strong>Зупинка критичної кровотечі</strong> – використовуйте<br>
+                    джгут, турнікет або інші засоби (наприклад,<br>
+                    ремінь, тканину).</p>
+                </div>
+            
+                <div class="info-item">
+                    <img src="{{ url_for('static', filename='plus.png') }}" alt="Плюс">
+                    <p><strong>Перевірка дихання</strong> – якщо постраждалий не<br>
+                    дихає, розпочніть серцево-легеневу реанімацію<br>
+                    (30 натискань на грудну клітку, 2 вдихи).</p>
+                </div>
+            
+                <div class="info-item">
+                    <img src="{{ url_for('static', filename='plus.png') }}" alt="Плюс">
+                    <p><strong>Обробка ран</strong> – використовуйте антисептики,<br> 
+                    стерильні пов’язки, накрийте рану чистою<br>
+                    тканиною.</p>
+                </div>
+            
+                <div class="info-item">
+                    <img src="{{ url_for('static', filename='plus.png') }}" alt="Плюс">
+                    <p><strong>Транспортування та евакуація</strong> – за можливості<br>
+                    перемістіть постраждалого у безпечне місце та<br>
+                    викличте допомогу.</p>
+                </div>
+                <div class="numbers-info">
+                    <p>101 - пожежна охорона; 102 - поліція;
+                    103 - швидка допомога;</p>
+                </div>
+                <div class="transparent-elements">
+                    <img src="{{ url_for('static', filename='plus.png') }}" height="400px" width="400px">
+                    <img src="{{ url_for('static', filename='plus.png') }}" height="200px" width="200px">
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
