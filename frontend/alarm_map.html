@@ -182,5 +182,20 @@
       <button id="zoom-in">+</button>
       <button id="zoom-out">-</button>
     </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2>Останні новини</h2>
+            <h3 id="regionName"></h3> 
+            <div id="newsContainer">
+                <div class="newsItem" id="n1">Новина 1</div>
+                <div class="newsItem" id="n2">Новина 2</div>
+                <div class="newsItem" id="n3">Новина 3</div>
+            </div>
+            <button class="close-btn" id="closeModal">Закрити</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='style_alarm_map.js') }}"></script>
   </body>
 </html>
