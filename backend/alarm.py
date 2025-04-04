@@ -1,6 +1,12 @@
 import json
 import time
 from alerts_in_ua import Client as AlertsClient
+import os
+
+file_path = 'active_alerts.json'
+if not os.path.exists(file_path):
+    file_path = os.path.join('backend', 'active_alerts.json')
+
 
 alerts_client = AlertsClient(token="26ffd55f74e65381554687b9410060cf138e00d4ab2203")
 
@@ -22,7 +28,7 @@ while True:
             "details": alert.notes
         })
 
-    with open('active_alerts.json', 'w', encoding='utf-8') as json_file:
+    with open(file_path, 'w', encoding='utf-8') as json_file:
         json.dump(data, json_file, ensure_ascii=False, indent=4)
 
     print("Дані оновлено в 'active_alerts.json'")
