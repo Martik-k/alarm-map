@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Перша допомога</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='medical_page.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_medical_help.css') }}" type="text/css" />
+    
 </head>
 <body>
+    
     <header>
-        <nav>
-            <a href="#">Карта тривог</a>
-            <a href="#">Аналітика</a>
-            <a href="#">Медична допомога</a>
-            <a href="#">Про нас</a>
-        </nav>
-        <div class="header-underline"></div>
+        {% include 'navbar.html' %}
     </header>
     <main>
         <section class="container">
