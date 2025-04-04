@@ -21,8 +21,8 @@ body {
 /* Карта */
 
 svg {
-  max-width: 100%; 
-  height: 100%;
+  max-width: 90%; 
+  height: 90%;
   object-fit: contain;
   transform: translateY(30px);
   zoom: 1.4;
@@ -254,3 +254,64 @@ svg path:hover {
   background-color: #779e45;
 }
 
+
+/* Планшети */
+@media (max-width: 1024px) {
+  .legend {
+    padding: 8px;
+  }
+
+  .legend h3 {
+    font-size: 30px;
+  }
+
+  .legend ul li {
+    font-size: 22px;
+  }
+
+  .legend ul li span {
+    width: 20px;
+    height: 18px;
+    margin-right: 10px;
+  }
+}
+
+/* Мобільні */
+@media (max-width: 768px) {
+  .legend {
+    bottom: 20px;
+    left: 15px;
+    padding: 7px;
+  }
+
+  .legend h3 {
+    font-size: 24px;
+  }
+
+  .legend ul li {
+    font-size: 18px;
+  }
+
+  .legend ul li span {
+    width: 18px;
+    height: 16px;
+    margin-right: 8px;
+  }
+}
+
+/* Дуже маленькі екрани (до 480px) */
+@media (max-width: 480px) {
+  .legend h3 {
+    font-size: 20px;
+  }
+
+  .legend ul li {
+    font-size: 15px;
+  }
+
+  .legend ul li span {
+    width: 16px;
+    height: 14px;
+    margin-right: 6px;
+  }
+}
