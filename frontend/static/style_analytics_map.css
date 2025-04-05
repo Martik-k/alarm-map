@@ -20,12 +20,19 @@ body {
 
 /* Карта */
 
+
 svg {
   max-width: 90%; 
   height: 90%;
   object-fit: contain;
   transform: translateY(30px);
   zoom: 1.4;
+  transition: transform 0.3s ease, transform-origin 0.3s ease; /* Smooth transitions */
+  transform-origin: center center; /* Ensure the zoom is centered */
+  cursor: grab; /* Change cursor to indicate draggable element */
+}
+svg:active {
+  cursor: grabbing; /* Change cursor when dragging */
 }
 
 svg path {
