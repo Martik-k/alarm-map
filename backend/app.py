@@ -1,4 +1,5 @@
 from datetime import datetime
+from models import db, init_db
 from flask import Flask, render_template
 from models import db, init_db, add_alarm, clear_alarm_table
 import re

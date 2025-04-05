@@ -1,82 +1,28 @@
 {
-    "alerts": [
-        {
-            "id": 8757,
-            "start": "2022-04-04T19:45:39+03:00",
-            "type": "air_raid",
-            "location": "Луганська область"
-        },
-        {
-            "id": 28288,
-            "start": "2022-12-11T00:22:00+02:00",
-            "type": "air_raid",
-            "location": "Автономна Республіка Крим"
-        },
-        {
-            "id": 74845,
-            "start": "2024-05-12T11:37:29+03:00",
-            "type": "air_raid",
-            "location": "Харківська область"
-        },
-        {
-            "id": 74846,
-            "start": "2024-05-12T11:37:57+03:00",
-            "type": "air_raid",
-            "location": "Харківська область"
-        },
-        {
-            "id": 76016,
-            "start": "2024-05-20T12:31:37+03:00",
-            "type": "artillery_shelling",
-            "location": "Харківська область"
-        },
-        {
-            "id": 76017,
-            "start": "2024-05-20T12:31:41+03:00",
-            "type": "urban_fights",
-            "location": "Харківська область"
-        },
-        {
-            "id": 111680,
-            "start": "2025-04-01T14:52:49+03:00",
-            "type": "artillery_shelling",
-            "location": "Дніпропетровська область"
-        },
-        {
-            "id": 112104,
-            "start": "2025-04-04T19:56:22+03:00",
-            "type": "artillery_shelling",
-            "location": "Дніпропетровська область"
-        },
-        {
-            "id": 112174,
-            "start": "2025-04-05T08:08:40+03:00",
-            "type": "artillery_shelling",
-            "location": "Дніпропетровська область"
-        },
-        {
-            "id": 112175,
-            "start": "2025-04-05T08:08:40+03:00",
-            "type": "artillery_shelling",
-            "location": "Дніпропетровська область"
-        },
-        {
-            "id": 112197,
-            "start": "2025-04-05T11:33:47+03:00",
-            "type": "artillery_shelling",
-            "location": "Дніпропетровська область"
-        },
-        {
-            "id": 112207,
-            "start": "2025-04-05T12:31:13+03:00",
-            "type": "air_raid",
-            "location": "Сумська область"
-        },
-        {
-            "id": 112217,
-            "start": "2025-04-05T13:54:49+03:00",
-            "type": "air_raid",
-            "location": "Харківська область"
-        }
-    ]
+    "Vinnytska": "notalarm",
+    "Volynska": "notalarm",
+    "Dnipropetrovska": "alarm",
+    "Donetska": "alarm",
+    "Zhytomyrska": "notalarm",
+    "Zakarpatska": "notalarm",
+    "Zaporizka": "alarm",
+    "Ivano-Frankivska": "notalarm",
+    "Kyivska": "notalarm",
+    "Kirovohradska": "alarm",
+    "Luhanska": "alarm",
+    "Lvivska": "notalarm",
+    "Mykolaivska": "alarm",
+    "Odeska": "notalarm",
+    "Poltavska": "alarm",
+    "Rivnenska": "notalarm",
+    "Sumska": "alarm",
+    "Ternopilska": "notalarm",
+    "Kharkivska": "alarm",
+    "Khersonska": "notalarm",
+    "Khmelnytska": "notalarm",
+    "Cherkaska": "notalarm",
+    "Chernihivska": "alarm",
+    "Chernivetska": "notalarm",
+    "Kyiv": "notalarm",
+    "Avtonomna Respublika Krym": "alarm"
 }
