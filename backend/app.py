@@ -1,11 +1,16 @@
 from datetime import datetime
 from flask import Flask, render_template
+from models import db, init_db, add_alarm, clear_alarm_table
 import re
 import alarm
 import time
-from threading import Thread
 
 app = Flask(__name__, static_folder="../frontend/static", template_folder="../frontend")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///active_alerts.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+init_db(app)
 
 # Ініціалізація глобальної змінної
 alarm_data_1 = {}
@@ -18,6 +23,7 @@ def get_data():
         accure_time = datetime.now().time()
         current_time = re.findall(r'..:..:..', f"{accure_time}")[0]
         time.sleep(30)
+
 
 danger_data_1= {
     "Vinnytska": "notdanger",
@@ -47,7 +53,6 @@ danger_data_1= {
     "Kyiv": "lessdanger",
     "Avtonomna Respublika Krym" : "lessdanger"
 }
-
 
 danger_data_2= {
     "Vinnytska": "notdanger",
@@ -100,3 +105,11 @@ def medical_help():
 def about_us():
     return render_template("about_us.html", \
                            onpage_map='false', onpage_analytics='false', onpage_help='false', onpage_us='true')
+
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)
+
+# add_alarm(app, 'b', 'c', 'd', 'e', 'f')
+# clear_alarm_table(app)

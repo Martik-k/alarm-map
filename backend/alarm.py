@@ -1,8 +1,6 @@
 import os
 import json
-import time
 from alerts_in_ua import Client as AlertsClient
-
 
 def get_active_alerts():
     """Get active alerts."""
