@@ -190,12 +190,18 @@
       </form>
       <button id="close-selector">Закрити</button>
     </div>
-
+    
     <div class="zoom-controls">
       <button id="zoom-in">+</button>
       <button id="zoom-out">-</button>
     </div>
 
-    <script src="{{ url_for('static', filename='map.js') }}"></script>
+    
+    <script type="application/json" id="danger-data-1">{{ danger_data_1 | tojson }}</script>
+    <script type="application/json" id="danger-data-2">{{ danger_data_2 | tojson }}</script>
+
+    <script src="{{ url_for('static', filename='js/selector.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/update_zoom.js') }}"></script>
   </body>
 </html>

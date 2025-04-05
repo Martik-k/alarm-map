@@ -98,10 +98,10 @@ danger_data_1= {
 danger_data_2= {
     "Vinnytska": "notdanger",
     "Volynska": "danger",
-    "Dnipropetrovska": "lessdanger",
+    "Dnipropetrovska": "danger",
     "Donetska": "danger",
     "Zhytomyrska": "notdanger",
-    "Zakarpatska": "notdanger",
+    "Zakarpatska": "danger",
     "Zaporizka": "danger",
     "Ivano-Frankivska": "notdanger",
     "Kyivska": "lessdanger",
@@ -135,7 +135,7 @@ def home():
 
 @app.route("/analytics")
 def analytics():
-    return render_template("analytics_map.html", danger_data=danger_data_1, danger_data_2=danger_data_2, \
+    return render_template("analytics_map.html", danger_data=danger_data_1,danger_data_1=danger_data_1, danger_data_2=danger_data_2, \
                            onpage_map='false', onpage_analytics='true', onpage_help='false', onpage_us='false')
 
 @app.route("/medical_help")
