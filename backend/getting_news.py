@@ -1,72 +1,59 @@
-import schedule
-import time
-from telethon.sync import TelegramClient
+import requests
+from bs4 import BeautifulSoup
 import json
 
 
 api_id = "25663089"
 api_hash = "fc972277aa436080fedcbf8f669df79f"
 json_file_path = "backend\\news.json"
-js_file_path = "backend\\news.js"
-region_channels = {
-    "Київ": "@kyivoda",
-    "Львів": "@people_of_action",
-    "Одеса": "@odeskaODA",
-    "Дніпро": "@dnipropetrovskaODA",
-    "Харків": "@kharkivoda",
-    "Запоріжжя": "@zoda_gov_ua",
-    "Черкаси": "@cherkaskaODA",
-    "Полтава": "@poltavskaOVA",
-    "Вінниця": "@vinnytskaODA",
-    "Житомир": "@zhytomyrskaODA",
-    "Суми": "@Zhyvytskyy",
-    "Чернігів": "@chernigivskaODA",
-    "Хмельницький": "@khmelnytskaODA",
-    "Івано-Франківськ": "@onyshchuksvitlana",
-    "Тернопіль": "@ternopilskaODA",
-    "Рівне": "@ODA_RV",
-    "Кропивницький": "@kirovogradskaODA",
-    "Миколаїв": "@mykolaivskaODA",
-    "Луцьк": "@volynskaODA",
-    "Херсон": "@khersonskaODA",
-    "Чернівці": "@chernivetskaODA",
-    "Ужгород": "@zoda_inform",
-    "Луганськ": "@luhanskaVTSA",
-    "Донецьк": "@DonetskaODA"
+regions = {
+    "Київ": 'https://www.ukr.net/news/kyiv.html',
+    "Львів": "https://www.ukr.net/news/lviv.html",
+    "Одеса": "https://www.ukr.net/news/odesa.html",
+    "Дніпро": 'https://www.ukr.net/news/dnipro.html',
+    "Харків": "https://www.ukr.net/news/kharkiv.html",
+    "Запоріжжя": "https://www.ukr.net/news/zaporizhzhya.html",
+    "Черкаси": "https://www.ukr.net/news/cherkasy.html",
+    "Полтава": "https://www.ukr.net/news/poltava.html",
+    "Вінниця": "https://www.ukr.net/news/vinnytsya.html",
+    "Житомир": "https://www.ukr.net/news/zhytomyr.html",
+    "Суми": "https://www.ukr.net/news/sumy.html",
+    "Чернігів": "https://www.ukr.net/news/chernihiv.html",
+    "Хмельницький": "https://www.ukr.net/news/hmelnitskiy.html",
+    "Івано-Франківськ": "https://www.ukr.net/news/ivano_frankivsk.html",
+    "Тернопіль": "https://www.ukr.net/news/ternopil.html",
+    "Рівне": "https://www.ukr.net/news/rivne.html",
+    "Кропивницький": "https://www.ukr.net/news/kropivnitskiy.html",
+    "Миколаїв": "https://www.ukr.net/news/mikolayiv.html",
+    "Луцьк": "https://www.ukr.net/news/lutsk.html",
+    "Херсон": "https://www.ukr.net/news/kherson.html",
+    "Чернівці": "https://www.ukr.net/news/chernivtsi.html",
+    "Ужгород": "https://www.ukr.net/news/uzhgorod.html",
+    "Луганськ": "https://www.ukr.net/news/luhansk.html",
+    "Донецьк": "https://www.ukr.net/news/donetsk.html",
+    "Крим": "https://www.ukr.net/news/crimea.html"
 }
-EXCLUDED_WORDS = ["тривога", "відбій", "мовчання"]
 
-def contains_excluded_words(text):
-    lower_text = text.lower()
-    return any(word in lower_text for word in EXCLUDED_WORDS)
+all_news = {}
 
 def get_news():
-    with TelegramClient("session_name", api_id, api_hash) as client: 
-        news_by_region = {region: [] for region in region_channels}
-        last_update = time.strftime("%Y-%m-%d %H:%M:%S")
+    for region_name, region_url in regions.items():
+        response = requests.get(region_url)
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-        for region, channel in region_channels.items():
-            messages = client.get_messages(channel, limit=40)
-            filtered_news = [
-                {"date": msg.date.strftime("%Y-%m-%d %H:%M:%S"), "text": msg.text}
-                for msg in messages if msg.text and not contains_excluded_words(msg.text)
-            ]
-            news_by_region[region] = filtered_news[:3]
+        news_items = soup.find_all('div', class_='im-tl')
 
-        data_to_save = {
-            "last_update": last_update,
-            "news": news_by_region
-        }
+        region_news = []
+        for item in news_items[:3]:
+            a_tag = item.find('a')
+            if a_tag:
+                title = a_tag.get_text(strip=True)
+                link = a_tag['href']
+                region_news.append(f"{title}::{link}")
 
-        with open(json_file_path, "w", encoding="utf-8") as json_file:
-            json.dump(data_to_save, json_file, ensure_ascii=False, indent=4)
+        all_news[region_name] = "///".join(region_news)
 
-        with open(js_file_path, "w", encoding="utf-8") as js_file:
-            js_file.write("export const data = "+str(data_to_save))
+    # with open('news_data.json', 'w', encoding='utf-8') as f:
+    #     json.dump(all_news, f, ensure_ascii=False, indent=4)
 
-
-schedule.every(4).seconds.do(get_news)
-
-while True:
-    schedule.run_pending()
-    time.sleep(4)
+    return all_news
