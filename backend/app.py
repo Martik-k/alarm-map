@@ -4,6 +4,7 @@ from flask import Flask, render_template
 from models import db, init_db, add_alarm, clear_alarm_table
 import re
 import alarm
+import getting_news
 import time
 
 app = Flask(__name__, static_folder="../frontend/static", template_folder="../frontend")
@@ -15,6 +16,7 @@ init_db(app)
 
 # Ініціалізація глобальної змінної
 alarm_data_1 = {}
+news = getting_news.get_news()
 current_time  = "00:00:00"
 def get_data():
     global alarm_data_1
@@ -89,7 +91,7 @@ danger_data_2= {
 def home():
     # accure_time = datetime.now().time()
     # current_time = re.findall(r'..:..:..', f"{accure_time}")[0]
-    return render_template("alarm_map.html", alarm_data=alarm_data_1, time=current_time, \
+    return render_template("alarm_map.html", news_data=news, alarm_data=alarm_data_1, time=current_time, \
                            onpage_map='true', onpage_analytics='false', onpage_help='false', onpage_us='false')
 
 @app.route("/analytics")
