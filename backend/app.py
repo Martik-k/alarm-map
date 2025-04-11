@@ -109,6 +109,10 @@ def about_us():
     return render_template("about_us.html", \
                            onpage_map='false', onpage_analytics='false', onpage_help='false', onpage_us='true')
 
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template("error_404.html"), "404"
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
