@@ -1,52 +1,90 @@
+"""Analitiks shelling"""
 import json
 from collections import defaultdict
 
-regions_keywords = {
-    "Вінницька": ["вінниц", "вінницьк"],
-    "Волинська": ["волин", "луцьк"],
-    "Дніпропетровська": ["дніпро", "дніпропетров", "павлоград", "кривий ріг"],
-    "Донецька": ["донецьк", "краматорськ", "маріуполь", "бахмут"],
-    "Житомирська": ["житомир"],
-    "Закарпатська": ["ужгород", "закарпат"],
-    "Запорізька": ["запоріж", "запорізьк"],
-    "Івано-Франківська": ["івано-франків", "франківськ"],
-    "Київська": ["київ", "київська"],
-    "Кіровоградська": ["кіровоград", "кропивницьк"],
-    "Луганська": ["луганськ", "сєвєродонецьк"],
-    "Львівська": ["львів", "львівськ"],
-    "Миколаївська": ["миколаїв"],
-    "Одеська": ["одеса", "одеськ"],
-    "Полтавська": ["полтава", "полтавськ"],
-    "Рівненська": ["рівне", "рівненськ"],
-    "Сумська": ["сум", "сумськ"],
-    "Тернопільська": ["терноп", "тернопільськ"],
-    "Харківська": ["харків", "харківськ"],
-    "Херсонська": ["херсон"],
-    "Хмельницька": ["хмельницьк"],
-    "Черкаська": ["черкас"],
-    "Чернівецька": ["чернівц", "буковин"],
-    "Чернігівська": ["чернігів"],
-}
+def analyze_shelling():
+    """Analyze ahelling."""
+    regions_keywords = {
+        "Вінницька": ["вінниц", "вінницьк"],
+        "Волинська": ["волин", "луцьк"],
+        "Дніпропетровська": ["дніпро", "дніпропетров", "павлоград", "кривий ріг"],
+        "Донецька": ["донецьк", "краматорськ", "маріуполь", "бахмут"],
+        "Житомирська": ["житомир"],
+        "Закарпатська": ["ужгород", "закарпат"],
+        "Запорізька": ["запоріж", "запорізьк"],
+        "Івано-Франківська": ["івано-франків", "франківськ"],
+        "Київська": ["київська"],
+        "Кіровоградська": ["кіровоград", "кропивницьк"],
+        "Луганська": ["луганськ", "сєвєродонецьк"],
+        "Львівська": ["львів", "львівськ"],
+        "Миколаївська": ["миколаїв"],
+        "Одеська": ["одеса", "одеськ"],
+        "Полтавська": ["полтава", "полтавськ"],
+        "Рівненська": ["рівне", "рівненськ"],
+        "Сумська": ["сум", "сумськ"],
+        "Тернопільська": ["терноп", "тернопільськ"],
+        "Харківська": ["харків", "харківськ"],
+        "Херсонська": ["херсон"],
+        "Хмельницька": ["хмельницьк"],
+        "Черкаська": ["черкас"],
+        "Чернівецька": ["чернівц", "буковин"],
+        "Чернігівська": ["чернігів"],
+        "Київ": ["київ"],
+        "Автономна Республіка Крим": ["крим", "симферополь", "ялта"],
+    }
 
-alert_keywords = ['вибух', 'вибухи', 'удар', 'удари']
+    region_translit = {
+        "Вінницька": "Vinnytska",
+        "Волинська": "Volynska",
+        "Дніпропетровська": "Dnipropetrovska",
+        "Донецька": "Donetska",
+        "Житомирська": "Zhytomyrska",
+        "Закарпатська": "Zakarpatska",
+        "Запорізька": "Zaporizka",
+        "Івано-Франківська": "Ivano-Frankivska",
+        "Київська": "Kyivska",
+        "Кіровоградська": "Kirovohradska",
+        "Луганська": "Luhanska",
+        "Львівська": "Lvivska",
+        "Миколаївська": "Mykolaivska",
+        "Одеська": "Odeska",
+        "Полтавська": "Poltavska",
+        "Рівненська": "Rivnenska",
+        "Сумська": "Sumska",
+        "Тернопільська": "Ternopilska",
+        "Харківська": "Kharkivska",
+        "Херсонська": "Khersonska",
+        "Хмельницька": "Khmelnytska",
+        "Черкаська": "Cherkaska",
+        "Чернівецька": "Chernivetska",
+        "Чернігівська": "Chernihivska",
+        "Київ": "Kyiv",
+        "Автономна Республіка Крим": "Avtonomna Respublika Krym",
+    }
 
-with open('@povitryanatrivogaaa_messages.json', 'r', encoding='utf-8') as f:
-    data = json.load(f)
+    alert_keywords = ['вибух', 'вибухи', 'удар', 'удари']
 
-explosions_by_region = defaultdict(int)
+    with open('@povitryanatrivogaaa_messages.json', 'r', encoding='utf-8') as f:
+        data = json.load(f)
 
-for entry in data:
-    msg = entry.get("message", "")
-    if not msg:
-        continue
+    explosions_by_region = defaultdict(int)
 
-    msg = msg.lower()
+    for entry in data:
+        msg = entry.get("message", "")
+        if not msg:
+            continue
 
-    if any(kw in msg for kw in alert_keywords):
-        for region, keys in regions_keywords.items():
-            if any(k in msg for k in keys):
-                explosions_by_region[region] += 1
-                break
+        msg = msg.lower()
 
-with open('explosions_by_region.json', 'w', encoding='utf-8') as f_out:
-    json.dump(explosions_by_region, f_out, ensure_ascii=False, indent=2)
+        if any(kw in msg for kw in alert_keywords):
+            for region, keys in regions_keywords.items():
+                if any(k in msg for k in keys):
+                    explosions_by_region[region] += 1
+                    break
+
+    result = {}
+
+    for region_ukr, translit in region_translit.items():
+        result[translit] = explosions_by_region.get(region_ukr, 0)
+
+    return result
