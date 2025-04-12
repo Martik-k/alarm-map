@@ -16,14 +16,16 @@ init_db(app)
 
 # Ініціалізація глобальної змінної
 alarm_data_1 = {}
-news = getting_news.get_news()
+news = ""
 current_time  = "00:00:00"
 def get_data():
     global alarm_data_1
     global current_time 
+    global news
     while True:
         alarm_data_1 = alarm.get_active_alerts()
         accure_time = datetime.now().time()
+        news = getting_news.get_news()
         current_time = re.findall(r'..:..:..', f"{accure_time}")[0]
         time.sleep(30)
 
