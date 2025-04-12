@@ -4,7 +4,7 @@ from alerts_in_ua import Client as AlertsClient
 
 def get_active_alerts():
     """Get active alerts."""
-    
+
     file_path = 'active_alerts.json'
     if not os.path.exists(file_path):
         file_path = os.path.join('backend', 'active_alerts.json')
@@ -41,7 +41,7 @@ def get_active_alerts():
         "Avtonomna Respublika Krym": "notalarm"
     }
 
-    translate = {
+    translate_location = {
         "Вінницька область": "Vinnytska",
         "Волинська область": "Volynska",
         "Дніпропетровська область": "Dnipropetrovska",
@@ -66,32 +66,21 @@ def get_active_alerts():
         "Черкаська область": "Cherkaska",
         "Чернігівська область": "Chernihivska",
         "Чернівецька область": "Chernivetska",
-        "Київ": "Kyiv",
+        "м. Київ": "Kyiv",
         "Автономна Республіка Крим": "Avtonomna Respublika Krym"
     }
+    
+    translate_alerts = {"no_alert": "notalarm",
+                        "active": "alarm", 
+                        "partly": "noalarm"}
 
-    prev_alarm_location_set = set()
+    alert_locations = alerts_client.get_air_raid_alert_statuses_by_oblast()
 
-    # while True:
-    active_alerts = alerts_client.get_active_alerts()
+    for alert_location in alert_locations:
+        alert, location = str(alert_location).split(':')
+        alert = translate_alerts[alert]
+        location = translate_location.get(location, None)
+        if location and alarm_data[location] != alert:
+            alarm_data[location] = alert
 
-    alarm_location_set = set()
-
-    for alert in active_alerts:
-        alarm_location_set.add(translate[alert.location_oblast])
-
-    new_alarm_locations = alarm_location_set - prev_alarm_location_set
-    new_cancelation_locations = prev_alarm_location_set - alarm_location_set
-
-    prev_alarm_location_set = alarm_location_set
-
-    for new_alarm_location in new_alarm_locations:
-        alarm_data[new_alarm_location] = 'alarm'
-
-    for new_cancelation_location in new_cancelation_locations:
-        alarm_data[new_cancelation_location] = 'notalarm'
     return alarm_data
-        # with open(file_path, 'w', encoding='utf-8') as json_file:
-        #     json.dump(alarm_data, json_file, ensure_ascii=False, indent=4)
-
-        # print("Дані оновлено в 'active_alerts.json'")
