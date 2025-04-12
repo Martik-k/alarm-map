@@ -72,7 +72,7 @@ def get_active_alerts():
     
     translate_alerts = {"no_alert": "notalarm",
                         "active": "alarm", 
-                        "partly": "noalarm"}
+                        "partly": "alarm"}
 
     alert_locations = alerts_client.get_air_raid_alert_statuses_by_oblast()
 
