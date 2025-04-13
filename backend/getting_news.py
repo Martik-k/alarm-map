@@ -54,7 +54,7 @@ def get_news():
                     continue
                 region_news.append(f"{title}::{link}")
 
-        all_news[region_name] = "///".join(region_news[:3])
+        all_news[region_name] = "///".join(region_news[:5])
 
     # with open('news_data.json', 'w', encoding='utf-8') as f:
     #     json.dump(all_news, f, ensure_ascii=False, indent=4)
