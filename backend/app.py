@@ -6,6 +6,7 @@ import re
 import alarm
 import getting_news
 import time
+import grad
 
 app = Flask(__name__, static_folder="../frontend/static", template_folder="../frontend")
 
@@ -14,7 +15,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 init_db(app)
 
-# Ініціалізація глобальної змінної
+
 alarm_data_1 = {}
 news = ""
 current_time  = "00:00:00"
@@ -28,76 +29,79 @@ def get_data():
         news = getting_news.get_news()
         current_time = re.findall(r'..:..:..', f"{accure_time}")[0]
         time.sleep(30)
-
-
-danger_data_1= {
-    "Vinnytska": "notdanger",
-    "Volynska": "danger",
-    "Dnipropetrovska": "lessdanger",
-    "Donetska": "danger",
-    "Zhytomyrska": "notdanger",
-    "Zakarpatska": "notdanger",
-    "Zaporizka": "lessdanger",
-    "Ivano-Frankivska": "notdanger",
-    "Kyivska": "lessdanger",
-    "Kirovohradska": "notdanger",
-    "Luhanska": "danger",
-    "Lvivska": "danger",
-    "Mykolaivska": "lessdanger",
-    "Odeska": "lessdanger",
-    "Poltavska": "notdanger",
-    "Rivnenska": "lessdanger",
-    "Sumska": "danger",
-    "Ternopilska": "lessdanger",
-    "Kharkivska": "danger",
-    "Khersonska": "lessdanger",
-    "Khmelnytska": "notdanger",
-    "Cherkaska": "lessdanger ",
-    "Chernihivska": "notdanger",
-    "Chernivetska": "lessdanger ",
-    "Kyiv": "lessdanger",
-    "Avtonomna Respublika Krym" : "lessdanger"
+danger_levels1 = {
+    "Vinnytska": 0.0,
+    "Volynska": 0.9,
+    "Dnipropetrovska": 0.5,
+    "Donetska": 1.0,
+    "Zhytomyrska": 0.0,
+    "Zakarpatska": 0.0,
+    "Zaporizka": 0.5,
+    "Ivano-Frankivska": 0.0,
+    "Kyivska": 0.5,
+    "Kirovohradska": 0.1,
+    "Luhanska": 1.0,
+    "Lvivska": 1.0,
+    "Mykolaivska": 0.5,
+    "Odeska": 0.5,
+    "Poltavska": 0.0,
+    "Rivnenska": 0.5,
+    "Sumska": 1.0,
+    "Ternopilska": 0.7,
+    "Kharkivska": 1.0,
+    "Khersonska": 0.5,
+    "Khmelnytska": 0.1,
+    "Cherkaska": 0.5,
+    "Chernihivska": 0.25,
+    "Chernivetska": 0.65,
+    "Kyiv": 0.5,
+    "Avtonomna Respublika Krym": 0.5
 }
 
-danger_data_2= {
-    "Vinnytska": "notdanger",
-    "Volynska": "danger",
-    "Dnipropetrovska": "danger",
-    "Donetska": "danger",
-    "Zhytomyrska": "notdanger",
-    "Zakarpatska": "danger",
-    "Zaporizka": "danger",
-    "Ivano-Frankivska": "notdanger",
-    "Kyivska": "lessdanger",
-    "Kirovohradska": "notdanger",
-    "Luhanska": "danger",
-    "Lvivska": "danger",
-    "Mykolaivska": "lessdanger",
-    "Odeska": "lessdanger",
-    "Poltavska": "notdanger",
-    "Rivnenska": "danger",
-    "Sumska": "danger",
-    "Ternopilska": "lessdanger",
-    "Kharkivska": "danger",
-    "Khersonska": "lessdanger",
-    "Khmelnytska": "notdanger",
-    "Cherkaska": "lessdanger ",
-    "Chernihivska": "ndanger",
-    "Chernivetska": "lessdanger ",
-    "Kyiv": "lessdanger",
-    "Avtonomna Respublika Krym" : "lessdanger"
+danger_levels2= {
+    "Vinnytska": 0.0,
+    "Volynska": 0.2,
+    "Dnipropetrovska": 0.5,
+    "Donetska": 1.0,
+    "Zhytomyrska": 0.78,
+    "Zakarpatska": 0.55,
+    "Zaporizka": 0.5,
+    "Ivano-Frankivska": 0.11,
+    "Kyivska": 0.5,
+    "Kirovohradska": 0.9,
+    "Luhanska": 1.0,
+    "Lvivska": 1.0,
+    "Mykolaivska": 0.86,
+    "Odeska": 0.5,
+    "Poltavska": 0.2,
+    "Rivnenska": 0.78,
+    "Sumska": 1.0,
+    "Ternopilska": 0.5,
+    "Kharkivska": 1.0,
+    "Khersonska": 0.65,
+    "Khmelnytska": 0.0,
+    "Cherkaska": 0.5,
+    "Chernihivska": 0.31,
+    "Chernivetska": 0.95,
+    "Kyiv": 0.5,
+    "Avtonomna Respublika Krym": 0.5
 }
+
+
 
 @app.route("/")
 @app.route("/alarm_map")
 def home():
     # accure_time = datetime.now().time()
     # current_time = re.findall(r'..:..:..', f"{accure_time}")[0]
+   
     return render_template("alarm_map.html", news_data=news, alarm_data=alarm_data_1, time=current_time, \
                            onpage_map='true', onpage_analytics='false', onpage_help='false', onpage_us='false')
 
 @app.route("/analytics")
 def analytics():
+    danger_data_1 = grad.count_color(danger_levels1)
+    danger_data_2 = grad.count_color(danger_levels2)
     return render_template("analytics_map.html", danger_data=danger_data_1, danger_data_1=danger_data_1, danger_data_2=danger_data_2, \
                            onpage_map='false', onpage_analytics='true', onpage_help='false', onpage_us='false')
 
