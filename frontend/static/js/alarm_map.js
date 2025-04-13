@@ -6,7 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const newsItemDivs = [
         document.getElementById("n1"),
         document.getElementById("n2"),
-        document.getElementById("n3")
+        document.getElementById("n3"),
+        document.getElementById("n4"),
+        document.getElementById("n5")
     ];
 
     const regionNameMap = {
