@@ -1,3 +1,7 @@
+# Ignore the virtual environment folder
+venv/
 env/
+
+# Ignore Python cache files
+*.pyc
 __pycache__/
-backend/active_alerts.json

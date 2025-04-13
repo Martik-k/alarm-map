@@ -38,6 +38,19 @@ openModalButtons.forEach(button => {
         const name = event.target.getAttribute('name');
         let translatedName = regionNameMap[name] || name || 'Невідомий регіон';
 
+        fetch(`/api/alert-data?region=${encodeURIComponent(translatedName)}_область&month=3&year=2025`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // Example: Display it in the modal
+                document.getElementById('avgDuration').textContent = data.average_duration;
+                document.getElementById('alertCount').textContent = data.alert_count;
+                document.getElementById('alertPercentage').textContent = `${data.alert_percentage}%`;
+                document.getElementById('lastAlert').textContent = data.last_alert;
+            })
+            .catch(error => console.error('API error:', error));
+
+
         if (
             translatedName &&
             !translatedName.includes('область') &&

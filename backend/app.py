@@ -1,12 +1,19 @@
 from datetime import datetime
 from models import db, init_db
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from models import db, init_db, add_alarm, clear_alarm_table
 import re
 import alarm
 import getting_news
 import time
 import grad
+
+from analytics import (  # change `your_module` to the actual Python filename without `.py`
+    calculate_average_duration,
+    count_alerts,
+    calculate_alert_percentage,
+    get_last_alert_time
+)
 
 app = Flask(__name__, static_folder="../frontend/static", template_folder="../frontend")
 
@@ -118,6 +125,27 @@ def about_us():
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template("error_404.html"), "404"
+
+@app.route('/api/alert-data', methods=['GET'])
+def get_alert_data():
+    region = request.args.get('region')
+    month = int(request.args.get('month'))
+    year = int(request.args.get('year'))
+
+    region = region.replace("_", " ")
+    file_path = 'history_alerts.json'  # adjust path if needed
+
+    avg_duration = calculate_average_duration(region, month, year, file_path)
+    count = count_alerts(region, month, year, file_path)
+    percent = calculate_alert_percentage(region, month, year, file_path)
+    last_alert = get_last_alert_time(region, file_path)
+
+    return jsonify({
+        'average_duration': avg_duration,
+        'alert_count': count,
+        'alert_percentage': round(percent, 2),
+        'last_alert': last_alert
+    })
 
 if __name__ == "__main__":
     with app.app_context():

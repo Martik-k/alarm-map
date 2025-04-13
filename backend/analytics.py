@@ -6,6 +6,8 @@ def calculate_average_duration(region: str, month: int, year: int, file_path: st
     """
     Calculates the average duration of alerts in a given region, month, and year.
     """
+    print(region, month)
+    
     with open(file_path, 'r', encoding='utf-8') as file:
         data = json.load(file)
     total_duration = 0
