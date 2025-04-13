@@ -6,7 +6,7 @@ import re
 import alarm
 import getting_news
 import time
-import grad
+import count_danger_level
 
 from analytics import (  # change `your_module` to the actual Python filename without `.py`
     calculate_average_duration,
@@ -140,8 +140,8 @@ def analytics():
     max_shelling = 9000
 
 
-    danger_data_1 = grad.count_color(danger_levels1)
-    danger_data_2 = grad.count_color(danger_levels2)
+    danger_data_1 = count_danger_level.count_color(danger_levels1)
+    danger_data_2 = count_danger_level.count_color(danger_levels2)
     return render_template("analytics_map.html", danger_data=danger_data_1, danger_data_1=danger_data_1, danger_data_2=danger_data_2,  min_alerts =min_alerts, min_shelling = min_shelling, max_alerts= max_alerts, max_shelling=max_shelling,\
                            onpage_map='false', onpage_analytics='true', onpage_help='false', onpage_us='false')
 
