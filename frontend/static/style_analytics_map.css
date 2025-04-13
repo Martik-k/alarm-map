@@ -247,6 +247,27 @@ svg path:hover {
     background-color: #A8B480;
   }
 
+
+  .alert-stats {
+    font-size: 0.9em;
+    color: #eee;
+    margin-top: 10px;
+  }
+  
+  .alert-stats h4 {
+    margin: 0 0 5px;
+    font-size: 1em;
+    font-weight: bold;
+  }
+  
+  .alert-stats .min {
+    color: white;
+  }
+  
+  .alert-stats .max {
+    color: white;
+  }
+  
   .region-label {
       font-family: 'Arial';
       font-size: 16px;

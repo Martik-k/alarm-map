@@ -13,10 +13,6 @@ def find_color(coefficient):
     b = notdanger[2] + coefficient * d_b
     return f"rgb({int(round(r))}, {int(round(g))}, {int(round(b))})"
 
-
-# for i in range(11):
-#     print(find_color(i*0.1))
-
 def count_color(cites):
     danger_data = {}
     for region, level in cites.items():
@@ -24,6 +20,45 @@ def count_color(cites):
     return danger_data
 
 
+def count_percent_danger(dictuanary_num):
+    max_num = max(dictuanary_num.values())
+    min_num = min(dictuanary_num.values())
+    danger_levels = {
+        region: round(count / max_num, 2)
+        for region, count in dictuanary_num.items()
+    }
+    return danger_levels, min_num,max_num
+
+danger_levels2= {
+    "Vinnytska": 45,
+    "Volynska": 78,
+    "Dnipropetrovska": 90,
+    "Donetska": 40,
+    "Zhytomyrska": 34,
+    "Zakarpatska": 9000,
+    "Zaporizka": 45,
+    "Ivano-Frankivska": 98,
+    "Kyivska": 6600,
+    "Kirovohradska": 89,
+    "Luhanska": 7878,
+    "Lvivska": 890,
+    "Mykolaivska": 568,
+    "Odeska": 890,
+    "Poltavska": 789,
+    "Rivnenska": 3000,
+    "Sumska": 890,
+    "Ternopilska": 7890,
+    "Kharkivska": 890,
+    "Khersonska": 3300,
+    "Khmelnytska": 900,
+    "Cherkaska": 5679,
+    "Chernihivska": 890,
+    "Chernivetska": 4677,
+    "Kyiv": 7890,
+    "Avtonomna Respublika Krym": 8000
+}
+
+# print(count_percent_danger(danger_levels2))
 
 # danger_levels2= {
 #     "Vinnytska": 0.0,

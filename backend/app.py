@@ -94,7 +94,34 @@ danger_levels2= {
     "Avtonomna Respublika Krym": 0.5
 }
 
-
+# danger_levels2= {
+#     "Vinnytska": 45,
+#     "Volynska": 78,
+#     "Dnipropetrovska": 90,
+#     "Donetska": 40,
+#     "Zhytomyrska": 34,
+#     "Zakarpatska": 90,
+#     "Zaporizka": 45,
+#     "Ivano-Frankivska": 98,
+#     "Kyivska": 660000,
+#     "Kirovohradska": 89,
+#     "Luhanska": 78787,
+#     "Lvivska": 890,
+#     "Mykolaivska": 568,
+#     "Odeska": 890,
+#     "Poltavska": 789,
+#     "Rivnenska": 30000,
+#     "Sumska": 890,
+#     "Ternopilska": 7890,
+#     "Kharkivska": 890,
+#     "Khersonska": 33000,
+#     "Khmelnytska": 900,
+#     "Cherkaska": 5679,
+#     "Chernihivska": 890,
+#     "Chernivetska": 4677,
+#     "Kyiv": 7890,
+#     "Avtonomna Respublika Krym": 8000
+# }
 
 @app.route("/")
 @app.route("/alarm_map")
@@ -102,14 +129,20 @@ def home():
     # accure_time = datetime.now().time()
     # current_time = re.findall(r'..:..:..', f"{accure_time}")[0]
    
-    return render_template("alarm_map.html", news_data=news, alarm_data=alarm_data_1, time=current_time, \
+    return render_template("alarm_map.html", news_data=news, alarm_data=alarm_data_1, time=current_time,\
                            onpage_map='true', onpage_analytics='false', onpage_help='false', onpage_us='false')
 
 @app.route("/analytics")
 def analytics():
+    min_alerts = 10
+    max_alerts = 700
+    min_shelling = 50
+    max_shelling = 9000
+
+
     danger_data_1 = grad.count_color(danger_levels1)
     danger_data_2 = grad.count_color(danger_levels2)
-    return render_template("analytics_map.html", danger_data=danger_data_1, danger_data_1=danger_data_1, danger_data_2=danger_data_2, \
+    return render_template("analytics_map.html", danger_data=danger_data_1, danger_data_1=danger_data_1, danger_data_2=danger_data_2,  min_alerts =min_alerts, min_shelling = min_shelling, max_alerts= max_alerts, max_shelling=max_shelling,\
                            onpage_map='false', onpage_analytics='true', onpage_help='false', onpage_us='false')
 
 @app.route("/medical_help")
