@@ -3,7 +3,7 @@ import json
 from collections import defaultdict
 from datetime import datetime, timedelta
 
-def analyze_shelling_timeframe(timeframe='day'):
+def analyze_shelling_timeframe(timeframe='month'):
     """Analyze shelling for a given timeframe ('day', 'week', 'month')."""
     regions_keywords = {
         "Вінницька": ["вінниц", "вінницьк"],
