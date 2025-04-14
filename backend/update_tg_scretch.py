@@ -4,8 +4,10 @@ from telethon import TelegramClient
 from datetime import datetime
 import asyncio
 
-api_id = "29254835"
-api_hash = "1b6c249fe0616c92c24bc2c2e9854abe"
+api_id = "28581097"
+api_hash = "35d89cfcdf1d3f18c482069cb8d23478"
+# api_id = "29254835"
+# api_hash = "1b6c249fe0616c92c24bc2c2e9854abe"
 file_name = '@povitryanatrivogaaa_messages.json'
 
 client = TelegramClient('session_name', api_id, api_hash)
@@ -13,6 +15,7 @@ client = TelegramClient('session_name', api_id, api_hash)
 async def update_messages(last_date):
     await client.start()
     channel = '@povitryanatrivogaaa'
+    last_date += ':00'
     last_date = datetime.strptime(last_date, "%Y-%m-%d %H:%M:%S")
 
     # try:

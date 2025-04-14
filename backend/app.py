@@ -1,15 +1,16 @@
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 from flask_migrate import Migrate
-from models import db, process_alarm_data, clear_alarm_table, clear_shelling_table,process_shelling_data
+from models import db, process_alarm_data, process_shelling_data
 from alarm import get_active_alerts
 import getting_news
 import time
 import count_danger_level
-import  scratch_tg_shelling
+import scratch_tg_shelling
 import timeframe_analitiks
 import update_tg_scretch
 import asyncio
+import threading
 
 from analytics import (  # change `your_module` to the actual Python filename without `.py`
     calculate_average_duration,
@@ -48,12 +49,18 @@ with scratch_tg_shelling.client:
 
 
 
-def get_shelling():
-    while True:
-        global last_data
-        data =asyncio.run(update_tg_scretch.update_messages(last_data))
-        filtert_data, last_data = timeframe_analitiks.extract_shelling_info(messege)
-        process_shelling_data(app,filtert_data)
+def start_async_shelling(last_data):
+    asyncio.run(_async_get_shelling(last_data))
+
+async def _async_get_shelling(last_data):
+    data = await update_tg_scretch.update_messages(last_data)
+    filtert_data, last_data = timeframe_analitiks.extract_shelling_info(data)
+    last_data += ':00'
+
+    print(filtert_data, last_data)
+    process_shelling_data(app, filtert_data)
+    
+threading.Thread(target=start_async_shelling, args=(last_data,)).start()
         
 
 def update_database():
