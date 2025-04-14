@@ -6,6 +6,11 @@ from alarm import get_active_alerts
 import getting_news
 import time
 import count_danger_level
+# import  scratch_tg_shelling
+import timeframe_analitiks
+# import update_tg_scretch
+import asyncio
+
 from analytics import (  # change `your_module` to the actual Python filename without `.py`
     calculate_average_duration,
     count_alerts,
@@ -36,6 +41,23 @@ def get_data():
         news = getting_news.get_news()
         current_time = datetime.now()
         time.sleep(30)
+# with scratch_tg_shelling.client:
+#     messege =  scratch_tg_shelling.client.loop.run_until_complete( scratch_tg_shelling.fetch_messages())
+#     filtert_data, last_data = timeframe_analitiks.extract_shelling_info(messege)
+        
+# def get_shelling():
+#     global last_data
+#     last_data = datetime.strptime("2025-04-13 23:37:10", "%Y-%m-%d %H:%M:%S")
+#     with update_tg_scretch.client:
+#         update_tg_scretch.client.loop.run_until_complete(update_tg_scretch.update_messages(last_data))
+
+# def get_shelling():
+#     while True:
+#         global last_data
+
+#         data =asyncio.run(update_tg_scretch.update_messages(last_data))
+#         filtert_data, last_data = timeframe_analitiks.extract_shelling_info(messege)
+        
 
 def update_database():
     while True:

@@ -2,9 +2,10 @@
 import json
 from telethon import TelegramClient
 
-
-api_id = "29254835"
-api_hash = "1b6c249fe0616c92c24bc2c2e9854abe"
+api_id = "28581097"
+api_hash = "35d89cfcdf1d3f18c482069cb8d23478"
+# api_id = "29254835"
+# api_hash = "1b6c249fe0616c92c24bc2c2e9854abe"
 file_name = '@povitryanatrivogaaa_messages.json'
 
 client = TelegramClient('session_name', api_id, api_hash)
@@ -16,17 +17,20 @@ async def fetch_messages():
 
     limit = 50000
 
-    async for message in client.iter_messages(channel):
+    async for message in client.iter_messages(channel,10):
         message_data = {
             'date': message.date.strftime('%Y-%m-%d %H:%M:%S'),
             'message': message.text
         }
         all_messages.append(message_data)
+    return all_messages
 
-    with open(file_name, 'w', encoding='utf-8') as f:
-        json.dump(all_messages, f, ensure_ascii=False, indent=4)
+    # with open(file_name, 'w', encoding='utf-8') as f:
+    #     json.dump(all_messages, f, ensure_ascii=False, indent=4)
 
-    print(f'Збережено {len(all_messages)} повідомлень у файл {file_name}')
+    # print(f'Збережено {len(all_messages)} повідомлень у файл {file_name}')
 
 with client:
-    client.loop.run_until_complete(fetch_messages())
+    messege = client.loop.run_until_complete(fetch_messages())
+
+print(messege)

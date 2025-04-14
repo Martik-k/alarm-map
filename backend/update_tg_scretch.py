@@ -2,6 +2,7 @@
 import json
 from telethon import TelegramClient
 from datetime import datetime
+import asyncio
 
 api_id = "29254835"
 api_hash = "1b6c249fe0616c92c24bc2c2e9854abe"
@@ -9,20 +10,21 @@ file_name = '@povitryanatrivogaaa_messages.json'
 
 client = TelegramClient('session_name', api_id, api_hash)
 
-async def update_messages():
+async def update_messages(last_date):
     await client.start()
     channel = '@povitryanatrivogaaa'
+    last_date = datetime.strptime(last_date, "%Y-%m-%d %H:%M:%S")
 
-    try:
-        with open(file_name, 'r', encoding='utf-8') as f:
-            saved_messages = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        saved_messages = []
+    # try:
+    #     with open(file_name, 'r', encoding='utf-8') as f:
+    #         saved_messages = json.load(f)
+    # except (FileNotFoundError, json.JSONDecodeError):
+    #     saved_messages = []
 
-    if saved_messages:
-        last_saved_date = max(datetime.strptime(m['date'], '%Y-%m-%d %H:%M:%S') for m in saved_messages)
-    else:
-        last_saved_date = None
+    # if saved_messages:
+    #     last_saved_date = last_data
+    # else:
+    #     last_saved_date = None
 
 
     new_messages = []
@@ -32,7 +34,7 @@ async def update_messages():
             continue
 
         msg_date = message.date.replace(tzinfo=None)
-        if last_saved_date and msg_date <= last_saved_date:
+        if msg_date <= last_date:
             break
 
         message_data = {
@@ -40,11 +42,31 @@ async def update_messages():
             'message': message.text
         }
         new_messages.append(message_data)
+    
+    # if new_messages:
+    #     updated_messages = new_messages + saved_messages
+    #     return  updated_messages
+        await client.disconnect()
+        return new_messages
 
-    if new_messages:
-        updated_messages = new_messages + saved_messages
-        with open(file_name, 'w', encoding='utf-8') as f:
-            json.dump(updated_messages, f, ensure_ascii=False, indent=4)
+    return None
+    #     with open(file_name, 'w', encoding='utf-8') as f:
+    #         json.dump(updated_messages, f, ensure_ascii=False, indent=4)
 
-with client:
-    client.loop.run_until_complete(update_messages())
+# with client:
+#     client.loop.run_until_complete(update_messages(last_data))
+
+last_data = "2025-04-13 23:20:10"
+def get_shelling():
+    
+    # last_data = datetime.strptime(last_data_str, "%Y-%m-%d %H:%M:%S")
+    print(asyncio.run(update_messages(last_data)))
+
+# def get_shelling():
+#     global last_data
+#     last_data = datetime.strptime("2025-04-13 23:37:10", "%Y-%m-%d %H:%M:%S")
+#     with client:
+#         messege =client.loop.run_until_complete(update_messages(last_data))
+#     return messege
+
+# print(get_shelling())

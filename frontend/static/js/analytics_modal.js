@@ -1,6 +1,6 @@
 /* Елементи DOM */
 const openModalButtons = document.querySelectorAll(".openModal");
-const closeModalButton = document.getElementById("closeModal");
+const closeModal = document.getElementById("closeModal");
 const modal = document.getElementById("modal");
 const regionNameElement = document.getElementById("regionName");
 const buttonContainer = document.querySelector('.popup-buttons');
