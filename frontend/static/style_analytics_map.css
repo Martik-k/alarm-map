@@ -374,6 +374,26 @@ svg path {
   stroke: #353930;
   stroke-width: 0.25;
 }
+.alert-stats {
+  font-size: 0.9em;
+  color: #eee;
+  margin-top: 10px;
+}
+
+.alert-stats h4 {
+  margin: 0 0 5px;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.alert-stats .min {
+  color: white;
+}
+
+.alert-stats .max {
+  color: white;
+}
+
 
 /* Original Danger levels */
 .danger {
@@ -407,7 +427,7 @@ svg path:hover {
 /* Original Legend styles */
 .legend {
   position: absolute;
-  bottom: 30px;
+  bottom: 1%;
   left: 30px;
   background-color: #353930;
   padding: 10px;
@@ -417,7 +437,7 @@ svg path:hover {
 
 .legend h3 {
   margin-bottom: 14px;
-  font-size: 40px;
+  font-size: 98%;
   color: white
 }
 
@@ -430,7 +450,7 @@ svg path:hover {
   display: flex;
   align-items: center;
   margin-bottom: 7px;
-  font-size: 30px; 
+  font-size: 80%; 
   color: white; 
 }
 
@@ -440,6 +460,27 @@ svg path:hover {
   height: 20px;
   margin-right: 12px;
 }
+
+
+.scale-labels {
+  font-size: 12px;
+}
+
+.gradient-scale {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2%;
+  }
+  
+  .scale-bar {
+    width: 220px;
+    height: 18px;
+    background: linear-gradient(to right, rgb(168, 180, 128), rgb(192, 71, 43));
+    border-radius: 4px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+  }
 
 .legend ul li span.danger {
   background-color: #c75d45;
