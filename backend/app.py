@@ -1,13 +1,11 @@
 from datetime import datetime
-from models import db, init_db
 from flask import Flask, render_template, request, jsonify
-from models import db, init_db, add_alarm, clear_alarm_table
-import re
-import alarm
+from flask_migrate import Migrate
+from models import db, process_alarm_data
+from alarm import get_active_alerts
 import getting_news
 import time
 import count_danger_level
-
 from analytics import (  # change `your_module` to the actual Python filename without `.py`
     calculate_average_duration,
     count_alerts,
@@ -20,22 +18,32 @@ app = Flask(__name__, static_folder="../frontend/static", template_folder="../fr
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///active_alerts.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-init_db(app)
+db.init_app(app)
+migrate = Migrate(app, db)
 
-
+# Ініціалізація глобальної змінної
 alarm_data_1 = {}
 news = ""
-current_time  = "00:00:00"
+current_time  = datetime.now()
 def get_data():
     global alarm_data_1
-    global current_time 
+    global current_time
     global news
     while True:
-        alarm_data_1 = alarm.get_active_alerts()
-        accure_time = datetime.now().time()
+        alarm_data_1 = get_active_alerts()
         news = getting_news.get_news()
-        current_time = re.findall(r'..:..:..', f"{accure_time}")[0]
+        current_time = datetime.now()
         time.sleep(30)
+
+def update_database():
+    while True:
+        with app.app_context():
+            db.create_all()
+            process_alarm_data(app, alarm_data_1, current_time)
+            print('update')
+        time.sleep(30)
+
+
 danger_levels1 = {
     "Vinnytska": 0.0,
     "Volynska": 0.9,
@@ -94,42 +102,12 @@ danger_levels2= {
     "Avtonomna Respublika Krym": 0.5
 }
 
-# danger_levels2= {
-#     "Vinnytska": 45,
-#     "Volynska": 78,
-#     "Dnipropetrovska": 90,
-#     "Donetska": 40,
-#     "Zhytomyrska": 34,
-#     "Zakarpatska": 90,
-#     "Zaporizka": 45,
-#     "Ivano-Frankivska": 98,
-#     "Kyivska": 660000,
-#     "Kirovohradska": 89,
-#     "Luhanska": 78787,
-#     "Lvivska": 890,
-#     "Mykolaivska": 568,
-#     "Odeska": 890,
-#     "Poltavska": 789,
-#     "Rivnenska": 30000,
-#     "Sumska": 890,
-#     "Ternopilska": 7890,
-#     "Kharkivska": 890,
-#     "Khersonska": 33000,
-#     "Khmelnytska": 900,
-#     "Cherkaska": 5679,
-#     "Chernihivska": 890,
-#     "Chernivetska": 4677,
-#     "Kyiv": 7890,
-#     "Avtonomna Respublika Krym": 8000
-# }
-
 @app.route("/")
 @app.route("/alarm_map")
 def home():
     # accure_time = datetime.now().time()
     # current_time = re.findall(r'..:..:..', f"{accure_time}")[0]
-   
-    return render_template("alarm_map.html", news_data=news, alarm_data=alarm_data_1, time=current_time,\
+    return render_template("alarm_map.html", news_data=news, alarm_data=alarm_data_1, time=current_time.strftime('%Y-%m-%d %H:%M:%S'), \
                            onpage_map='true', onpage_analytics='false', onpage_help='false', onpage_us='false')
 
 @app.route("/analytics")
@@ -181,8 +159,6 @@ def get_alert_data():
     })
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
 
 # add_alarm(app, 'b', 'c', 'd', 'e', 'f')
