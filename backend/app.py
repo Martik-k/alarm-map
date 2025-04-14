@@ -55,7 +55,6 @@ def start_async_shelling(last_data):
 async def _async_get_shelling(last_data):
     data = await update_tg_scretch.update_messages(last_data)
     filtert_data, last_data = timeframe_analitiks.extract_shelling_info(data)
-    last_data += ':00'
 
     print(filtert_data, last_data)
     process_shelling_data(app, filtert_data)

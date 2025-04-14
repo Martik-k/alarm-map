@@ -63,7 +63,7 @@ last_data = "2025-04-13 23:20:10"
 def get_shelling():
     
     # last_data = datetime.strptime(last_data_str, "%Y-%m-%d %H:%M:%S")
-    print(asyncio.run(update_messages(last_data)))
+    asyncio.run(update_messages(last_data))
 
 # def get_shelling():
 #     global last_data
