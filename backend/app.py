@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 from flask_migrate import Migrate
-from models import db, process_alarm_data
+from models import db, process_alarm_data, clear_alarm_table, clear_shelling_table
 from alarm import get_active_alerts
 import getting_news
 import time
@@ -20,6 +20,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 migrate = Migrate(app, db)
+
 
 # Ініціалізація глобальної змінної
 alarm_data_1 = {}

@@ -1,7 +1,6 @@
 import unittest
 from app import app
 from models import db, Alarm, process_alarm_data
-from datetime import datetime
 
 def print_alarms_table():
     with app.app_context():

@@ -73,12 +73,12 @@ def process_alarm_data(app, alarm_data, time):
         return new_alarms, finished_alarms
 
 
-def get_data_from_db_days_ago(app, current_time_str, number_days):
+def get_alarm_data_from_db_days_ago(app, current_time_str, number_days):
     with app.app_context():
         current_time = datetime.strptime(current_time_str, '%Y-%m-%d %H:%M:%S')
-        one_month_ago = current_time - timedelta(days=number_days)
+        days_ago = current_time - timedelta(days=number_days)
 
-        alarms = Alarm.query.filter(Alarm.start >= one_month_ago).all()
+        alarms = Alarm.query.filter(Alarm.start >= days_ago).all()
 
         alarm_counts = {}
         for alarm in alarms:
@@ -88,3 +88,49 @@ def get_data_from_db_days_ago(app, current_time_str, number_days):
                 alarm_counts[alarm.location] = 1
 
         return alarm_counts
+
+
+
+class Shelling(db.Model):
+    __tablename__ = 'shellings'
+
+    id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.DateTime)
+    location = db.Column(db.String(50))
+
+    def __repr__(self):
+        return f'<Shelling {self.location} - {self.time}>'
+
+
+def clear_shelling_table(app):
+    with app.app_context():
+        Shelling.query.delete()
+        db.session.commit()
+
+
+def process_shelling_data(app, shelling_data: list[dict[str, str]]):
+    with app.app_context():
+        for shelling in shelling_data:
+            datetime_str = f"{shelling['date']} {shelling['time']}"
+            datetime_object = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M')
+
+            new_alarm = Shelling(time=datetime_object, location=shelling['city'])
+            db.session.add(new_alarm)
+            db.session.commit()
+
+
+def get_shelling_data_from_db_days_ago(app, current_time_str, number_days):
+    with app.app_context():
+        current_time = datetime.strptime(current_time_str, '%Y-%m-%d %H:%M')
+        one_month_ago = current_time - timedelta(days=number_days)
+
+        shellings = Shelling.query.filter(Shelling.time >= one_month_ago).all()
+
+        shelling_counts = {}
+        for shelling in shellings:
+            if shelling.location in shelling_counts:
+                shelling_counts[shelling.location] += 1
+            else:
+                shelling_counts[shelling.location] = 1
+
+        return shelling_counts
