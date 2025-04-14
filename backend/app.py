@@ -1,9 +1,8 @@
 from datetime import datetime
-from models import db, init_db
 from flask import Flask, render_template, request, jsonify
-from models import db, init_db, add_alarm, clear_alarm_table
-import re
-import alarm
+from flask_migrate import Migrate
+from models import db, process_alarm_data, clear_alarm_table, clear_shelling_table
+from alarm import get_active_alerts
 import getting_news
 import time
 import count_danger_level
@@ -16,7 +15,8 @@ from analytics import (  # change `your_module` to the actual Python filename wi
     calculate_average_duration,
     count_alerts,
     calculate_alert_percentage,
-    get_last_alert_time
+    get_last_alert_time,
+    plot_alert_durations_base64
 )
 
 app = Flask(__name__, static_folder="../frontend/static", template_folder="../frontend")
@@ -24,21 +24,22 @@ app = Flask(__name__, static_folder="../frontend/static", template_folder="../fr
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///active_alerts.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-init_db(app)
+db.init_app(app)
+migrate = Migrate(app, db)
 
 
+# Ініціалізація глобальної змінної
 alarm_data_1 = {}
 news = ""
-current_time  = "00:00:00"
+current_time  = datetime.now()
 def get_data():
     global alarm_data_1
     global current_time
     global news
     while True:
-        alarm_data_1 = alarm.get_active_alerts()
-        accure_time = datetime.now().time()
+        alarm_data_1 = get_active_alerts()
         news = getting_news.get_news()
-        current_time = re.findall(r'..:..:..', f"{accure_time}")[0]
+        current_time = datetime.now()
         time.sleep(30)
 with scratch_tg_shelling.client:
     messege =  scratch_tg_shelling.client.loop.run_until_complete( scratch_tg_shelling.fetch_messages())
@@ -57,6 +58,15 @@ def get_shelling():
         data =asyncio.run(update_tg_scretch.update_messages(last_data))
         filtert_data, last_data = timeframe_analitiks.extract_shelling_info(messege)
         
+
+def update_database():
+    while True:
+        with app.app_context():
+            db.create_all()
+            process_alarm_data(app, alarm_data_1, current_time)
+            print('update')
+        time.sleep(30)
+
 
 danger_levels1 = {
     "Vinnytska": 0.0,
@@ -116,42 +126,12 @@ danger_levels2= {
     "Avtonomna Respublika Krym": 0.5
 }
 
-# danger_levels2= {
-#     "Vinnytska": 45,
-#     "Volynska": 78,
-#     "Dnipropetrovska": 90,
-#     "Donetska": 40,
-#     "Zhytomyrska": 34,
-#     "Zakarpatska": 90,
-#     "Zaporizka": 45,
-#     "Ivano-Frankivska": 98,
-#     "Kyivska": 660000,
-#     "Kirovohradska": 89,
-#     "Luhanska": 78787,
-#     "Lvivska": 890,
-#     "Mykolaivska": 568,
-#     "Odeska": 890,
-#     "Poltavska": 789,
-#     "Rivnenska": 30000,
-#     "Sumska": 890,
-#     "Ternopilska": 7890,
-#     "Kharkivska": 890,
-#     "Khersonska": 33000,
-#     "Khmelnytska": 900,
-#     "Cherkaska": 5679,
-#     "Chernihivska": 890,
-#     "Chernivetska": 4677,
-#     "Kyiv": 7890,
-#     "Avtonomna Respublika Krym": 8000
-# }
-
 @app.route("/")
 @app.route("/alarm_map")
 def home():
     # accure_time = datetime.now().time()
     # current_time = re.findall(r'..:..:..', f"{accure_time}")[0]
-   
-    return render_template("alarm_map.html", news_data=news, alarm_data=alarm_data_1, time=current_time,\
+    return render_template("alarm_map.html", news_data=news, alarm_data=alarm_data_1, time=current_time.strftime('%Y-%m-%d %H:%M:%S'), \
                            onpage_map='true', onpage_analytics='false', onpage_help='false', onpage_us='false')
 
 @app.route("/analytics")
@@ -181,30 +161,35 @@ def about_us():
 def not_found_error(error):
     return render_template("error_404.html"), "404"
 
+
 @app.route('/api/alert-data', methods=['GET'])
 def get_alert_data():
     region = request.args.get('region')
-    month = int(request.args.get('month'))
-    year = int(request.args.get('year'))
+    range_prop = request.args.get('range')
 
+    print(range_prop)
     region = region.replace("_", " ")
     file_path = 'history_alerts.json'  # adjust path if needed
 
-    avg_duration = calculate_average_duration(region, month, year, file_path)
-    count = count_alerts(region, month, year, file_path)
-    percent = calculate_alert_percentage(region, month, year, file_path)
-    last_alert = get_last_alert_time(region, file_path)
+    try:
+        avg_duration = calculate_average_duration(region, range_prop, file_path)
+        count = count_alerts(region, range_prop, file_path)
+        percent = calculate_alert_percentage(region, range_prop, file_path)
+        last_alert = get_last_alert_time(region, file_path)
+        image_base64 = plot_alert_durations_base64(region, range_prop, file_path)
 
-    return jsonify({
-        'average_duration': avg_duration,
-        'alert_count': count,
-        'alert_percentage': round(percent, 2),
-        'last_alert': last_alert
-    })
+        return jsonify({
+            'average_duration': avg_duration,
+            'alert_count': count,
+            'alert_percentage': round(percent, 2),
+            'last_alert': last_alert,
+            'imageBase64': image_base64
+        })
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
 
 # add_alarm(app, 'b', 'c', 'd', 'e', 'f')

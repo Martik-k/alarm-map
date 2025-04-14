@@ -11,7 +11,6 @@ def get_active_alerts():
 
 
     alerts_client = AlertsClient(token="26ffd55f74e65381554687b9410060cf138e00d4ab2203")
-
     alarm_data = {
         "Vinnytska": "notalarm",
         "Volynska": "notalarm",
@@ -83,4 +82,4 @@ def get_active_alerts():
         if location and alarm_data[location] != alert:
             alarm_data[location] = alert
 
-    return alarm_data
+    return alarm_data   # goes to app.py
