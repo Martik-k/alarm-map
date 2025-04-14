@@ -1,4 +1,4 @@
-// DOM Elements
+/* Елементи DOM */
 const openModalButtons = document.querySelectorAll(".openModal");
 const closeModalButton = document.getElementById("closeModal");
 const modal = document.getElementById("modal");
@@ -11,7 +11,7 @@ const lastAlertElement = document.getElementById('lastAlert');
 const chartImageElement = document.getElementById('chartImage');
 const loadingElement = document.getElementById('loading');
 
-// Region name mapping
+/* Відображення назв регіонів */
 const regionNameMap = {
   "Avtonomna Respublika Krym": "А.Р. Крим",
   "Vinnytska": "Вінницька",
@@ -19,7 +19,7 @@ const regionNameMap = {
   "Dnipropetrovska": "Дніпропетровська",
   "Donetska": "Донецька",
   "Zhytomyrska": "Житомирська",
-  "Zakarpatska": "Закарпаття",
+  "Zakarpatska": "Закарпатська",
   "Zaporizka": "Запорізька",
   "Ivano-Frankivska": "Івано-Франківська",
   "Kyivska": "Київська",
@@ -42,60 +42,70 @@ const regionNameMap = {
   "Sevastopilska": "Севастополь"
 };
 
-// Store the currently active listener function
+/* Зберігає поточну активну функцію слухача */
 let currentPeriodButtonListener = null;
-// Store the AbortController for fetch requests
+/* Зберігає AbortController для запитів fetch */
 let currentFetchController = null;
 
-// Function to show loading state
+/* Функція для відображення стану завантаження */
 function showLoading() {
   loadingElement.classList.add('active');
 }
 
-// Function to hide loading state
+/* Функція для приховання стану завантаження */
 function hideLoading() {
   loadingElement.classList.remove('active');
 }
 
-// Function to clear modal data
+/* Функція для очищення даних модального вікна */
 function clearModalData() {
   avgDurationElement.textContent = '';
   alertCountElement.textContent = '';
   alertPercentageElement.textContent = '';
   lastAlertElement.textContent = '';
-  // Set a transparent pixel or placeholder
+  /* Встановлення прозорого пікселя або заповнювача */
   chartImageElement.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 }
 
-// Function to fetch and update data
+/* Функція для отримання та оновлення даних */
 async function fetchAndUpdateData(region, period) {
-  // Abort any previous ongoing fetch for this modal
+  /* Перервати будь-який попередній триваючий запит fetch для цього модального вікна */
   if (currentFetchController) {
     currentFetchController.abort();
   }
-  // Create a new controller for the new fetch
+  /* Створити новий контролер для нового запиту fetch */
   currentFetchController = new AbortController();
   const signal = currentFetchController.signal;
 
-  // Clear previous data immediately before fetching
+  /* Очистити попередні дані безпосередньо перед отриманням */
   clearModalData();
-  // Show loading indicator
+  /* Показати індикатор завантаження */
   showLoading();
 
+  let currentRegion = region;
+
+  switch (currentRegion) {
+    case "А.Р. Крим":
+      currentRegion = "Автономна Республіка Крим"
+      break;
+    default:
+      currentRegion = currentRegion + " область"
+      break;
+  }
   try {
-    const response = await fetch(`/api/alert-data?region=${encodeURIComponent(region)}_область&range=${period}`, { signal });
+    const response = await fetch(`/api/alert-data?region=${encodeURIComponent(currentRegion)}&range=${period}`, { signal });
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP помилка! статус: ${response.status}`);
     }
     const data = await response.json();
-    console.log(`Data fetched for ${region}, period ${period}:`, data);
+    console.log(`Дані отримано для ${region}, період ${period}:`, data);
 
-    // Update UI only if the fetch wasn't aborted
+    /* Оновити інтерфейс користувача лише якщо запит fetch не було перервано */
     avgDurationElement.textContent = data.average_duration ?? 'N/A';
     alertCountElement.textContent = data.alert_count ?? 'N/A';
     alertPercentageElement.textContent = data.alert_percentage !== undefined ? `${data.alert_percentage}%` : 'N/A';
     lastAlertElement.textContent = data.last_alert ?? 'Немає даних';
-    
+
     if (data.imageBase64) {
       chartImageElement.src = `data:image/png;base64,${data.imageBase64}`;
     } else {
@@ -104,12 +114,12 @@ async function fetchAndUpdateData(region, period) {
 
   } catch (error) {
     if (error.name === 'AbortError') {
-      console.log('Fetch aborted');
+      console.log('Запит fetch перервано');
     } else {
-      console.error('API error:', error);
-      // Display error message to the user in the modal
+      console.error('Помилка API:', error);
+      /* Відобразити повідомлення про помилку користувачеві в модальному вікні */
       lastAlertElement.textContent = 'Помилка завантаження даних.';
-      // Clear other fields or show error state
+      /* Очистити інші поля або показати стан помилки */
       avgDurationElement.textContent = '-';
       alertCountElement.textContent = '-';
       alertPercentageElement.textContent = '-';
@@ -120,14 +130,14 @@ async function fetchAndUpdateData(region, period) {
   }
 }
 
-// Event listener for opening the modal
+/* Слухач подій для відкриття модального вікна */
 openModalButtons.forEach(button => {
   button.addEventListener("click", async (event) => {
     const name = event.target.getAttribute('name');
-    const translatedName = regionNameMap[name] || name || 'Невідомий регіон';
-    let currentPeriod = "year"; // Default period when opening
+    let translatedName = regionNameMap[name] || name || 'Невідомий регіон';
+    let currentPeriod = "year"; /* Період за замовчуванням при відкритті */
 
-    // Prepare display name
+    /* Підготовка назви для відображення */
     let displayName = translatedName;
     if (
       translatedName &&
@@ -141,21 +151,21 @@ openModalButtons.forEach(button => {
     }
     regionNameElement.textContent = displayName;
 
-    // Clear old data and listener
+    /* Очистити старі дані та слухача */
     clearModalData();
     if (buttonContainer && currentPeriodButtonListener) {
       buttonContainer.removeEventListener('click', currentPeriodButtonListener);
       currentPeriodButtonListener = null;
     }
-    
-    // Abort any fetch that might be ongoing from a previously closed modal
+
+    /* Перервати будь-який запит fetch, який може тривати з попередньо закритого модального вікна */
     if (currentFetchController) {
       currentFetchController.abort();
       currentFetchController = null;
     }
 
     if (buttonContainer) {
-      // Set initial active button
+      /* Встановити початкову активну кнопку */
       buttonContainer.querySelectorAll('button[data-period]').forEach(btn => {
         btn.classList.remove('active');
       });
@@ -164,67 +174,67 @@ openModalButtons.forEach(button => {
         initialActiveButton.classList.add('active');
       }
 
-      // Define the new listener function for THIS modal instance
+      /* Визначити нову функцію слухача для ЦЬОГО екземпляра модального вікна */
       currentPeriodButtonListener = async (e) => {
         const clickedButton = e.target.closest('button[data-period]');
         if (clickedButton && !clickedButton.classList.contains('active')) {
           const newPeriod = clickedButton.dataset.period;
           currentPeriod = newPeriod;
 
-          // Update active button state
+          /* Оновити стан активної кнопки */
           buttonContainer.querySelectorAll('button[data-period]').forEach(btn => {
             btn.classList.remove('active');
           });
           clickedButton.classList.add('active');
 
-          // Fetch data for the new period
+          /* Отримати дані для нового періоду */
           fetchAndUpdateData(translatedName, newPeriod);
         }
       };
 
-      // Add the new listener
+      /* Додати нового слухача */
       buttonContainer.addEventListener('click', currentPeriodButtonListener);
 
-      // Fetch initial data for the default period
+      /* Отримати початкові дані для періоду за замовчуванням */
       fetchAndUpdateData(translatedName, currentPeriod);
     } else {
-      console.error("Error: Could not find the element with class 'popup-buttons'.");
+      console.error("Помилка: Не вдалося знайти елемент з класом 'popup-buttons'.");
       lastAlertElement.textContent = 'Помилка інтерфейсу: кнопки періоду не знайдено.';
     }
 
-    // Show Modal
+    /* Показати модальне вікно */
     modal.classList.add("active");
     document.body.classList.add("modal-open");
   });
 });
 
-// Event listener for closing the modal
+/* Слухач подій для закриття модального вікна */
 closeModalButton.addEventListener("click", () => {
   modal.classList.remove("active");
   document.body.classList.remove("modal-open");
 
-  // Clean up when modal closes
+  /* Очищення при закритті модального вікна */
   clearModalData();
   if (buttonContainer && currentPeriodButtonListener) {
     buttonContainer.removeEventListener('click', currentPeriodButtonListener);
     currentPeriodButtonListener = null;
   }
-  
-  // Abort any ongoing fetch when closing the modal
+
+  /* Перервати будь-який триваючий запит fetch при закритті модального вікна */
   if (currentFetchController) {
     currentFetchController.abort();
     currentFetchController = null;
   }
 });
 
-// Close modal when clicking outside the content
+/* Закрити модальне вікно при кліку поза його вмістом */
 modal.addEventListener("click", (e) => {
   if (e.target === modal) {
     closeModalButton.click();
   }
 });
 
-// Close modal with Escape key
+/* Закрити модальне вікно клавішею Escape */
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && modal.classList.contains("active")) {
     closeModalButton.click();

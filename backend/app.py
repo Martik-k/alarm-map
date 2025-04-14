@@ -145,9 +145,9 @@ def get_alert_data():
     region = request.args.get('region')
     range_prop = request.args.get('range')
 
-    print(range_prop)
-    region = region.replace("_", " ")
-    file_path = 'history_alerts.json'  # adjust path if needed
+    print(region, range_prop)
+    file_path = 'history_alerts.json'
+    
 
     try:
         avg_duration = calculate_average_duration(region, range_prop, file_path)
