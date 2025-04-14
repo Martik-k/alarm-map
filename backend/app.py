@@ -1,12 +1,11 @@
 from datetime import datetime
-from models import db, init_db
 from flask import Flask, render_template, request, jsonify
-from models import db, init_db, add_alarm, clear_alarm_table
-import re
-import alarm
+from flask_migrate import Migrate
+from models import db, process_alarm_data, clear_alarm_table, clear_shelling_table
+from alarm import get_active_alerts
 import getting_news
 import time
-
+import count_danger_level
 from analytics import (  # change `your_module` to the actual Python filename without `.py`
     calculate_average_duration,
     count_alerts,
@@ -20,80 +19,89 @@ app = Flask(__name__, static_folder="../frontend/static", template_folder="../fr
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///active_alerts.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-init_db(app)
+db.init_app(app)
+migrate = Migrate(app, db)
+
 
 # Ініціалізація глобальної змінної
 alarm_data_1 = {}
 news = ""
-current_time  = "00:00:00"
+current_time  = datetime.now()
 def get_data():
     global alarm_data_1
-    global current_time 
+    global current_time
     global news
     while True:
-        alarm_data_1 = alarm.get_active_alerts()
-        accure_time = datetime.now().time()
+        alarm_data_1 = get_active_alerts()
         news = getting_news.get_news()
-        current_time = re.findall(r'..:..:..', f"{accure_time}")[0]
+        current_time = datetime.now()
+        time.sleep(30)
+
+def update_database():
+    while True:
+        with app.app_context():
+            db.create_all()
+            process_alarm_data(app, alarm_data_1, current_time)
+            print('update')
         time.sleep(30)
 
 
-danger_data_1= {
-    "Vinnytska": "notdanger",
-    "Volynska": "danger",
-    "Dnipropetrovska": "lessdanger",
-    "Donetska": "danger",
-    "Zhytomyrska": "notdanger",
-    "Zakarpatska": "notdanger",
-    "Zaporizka": "lessdanger",
-    "Ivano-Frankivska": "notdanger",
-    "Kyivska": "lessdanger",
-    "Kirovohradska": "notdanger",
-    "Luhanska": "danger",
-    "Lvivska": "danger",
-    "Mykolaivska": "lessdanger",
-    "Odeska": "lessdanger",
-    "Poltavska": "notdanger",
-    "Rivnenska": "lessdanger",
-    "Sumska": "danger",
-    "Ternopilska": "lessdanger",
-    "Kharkivska": "danger",
-    "Khersonska": "lessdanger",
-    "Khmelnytska": "notdanger",
-    "Cherkaska": "lessdanger ",
-    "Chernihivska": "notdanger",
-    "Chernivetska": "lessdanger ",
-    "Kyiv": "lessdanger",
-    "Avtonomna Respublika Krym" : "lessdanger"
+danger_levels1 = {
+    "Vinnytska": 0.0,
+    "Volynska": 0.9,
+    "Dnipropetrovska": 0.5,
+    "Donetska": 1.0,
+    "Zhytomyrska": 0.0,
+    "Zakarpatska": 0.0,
+    "Zaporizka": 0.5,
+    "Ivano-Frankivska": 0.0,
+    "Kyivska": 0.5,
+    "Kirovohradska": 0.1,
+    "Luhanska": 1.0,
+    "Lvivska": 1.0,
+    "Mykolaivska": 0.5,
+    "Odeska": 0.5,
+    "Poltavska": 0.0,
+    "Rivnenska": 0.5,
+    "Sumska": 1.0,
+    "Ternopilska": 0.7,
+    "Kharkivska": 1.0,
+    "Khersonska": 0.5,
+    "Khmelnytska": 0.1,
+    "Cherkaska": 0.5,
+    "Chernihivska": 0.25,
+    "Chernivetska": 0.65,
+    "Kyiv": 0.5,
+    "Avtonomna Respublika Krym": 0.5
 }
 
-danger_data_2= {
-    "Vinnytska": "notdanger",
-    "Volynska": "danger",
-    "Dnipropetrovska": "danger",
-    "Donetska": "danger",
-    "Zhytomyrska": "notdanger",
-    "Zakarpatska": "danger",
-    "Zaporizka": "danger",
-    "Ivano-Frankivska": "notdanger",
-    "Kyivska": "lessdanger",
-    "Kirovohradska": "notdanger",
-    "Luhanska": "danger",
-    "Lvivska": "danger",
-    "Mykolaivska": "lessdanger",
-    "Odeska": "lessdanger",
-    "Poltavska": "notdanger",
-    "Rivnenska": "danger",
-    "Sumska": "danger",
-    "Ternopilska": "lessdanger",
-    "Kharkivska": "danger",
-    "Khersonska": "lessdanger",
-    "Khmelnytska": "notdanger",
-    "Cherkaska": "lessdanger ",
-    "Chernihivska": "ndanger",
-    "Chernivetska": "lessdanger ",
-    "Kyiv": "lessdanger",
-    "Avtonomna Respublika Krym" : "lessdanger"
+danger_levels2= {
+    "Vinnytska": 0.0,
+    "Volynska": 0.2,
+    "Dnipropetrovska": 0.5,
+    "Donetska": 1.0,
+    "Zhytomyrska": 0.78,
+    "Zakarpatska": 0.55,
+    "Zaporizka": 0.5,
+    "Ivano-Frankivska": 0.11,
+    "Kyivska": 0.5,
+    "Kirovohradska": 0.9,
+    "Luhanska": 1.0,
+    "Lvivska": 1.0,
+    "Mykolaivska": 0.86,
+    "Odeska": 0.5,
+    "Poltavska": 0.2,
+    "Rivnenska": 0.78,
+    "Sumska": 1.0,
+    "Ternopilska": 0.5,
+    "Kharkivska": 1.0,
+    "Khersonska": 0.65,
+    "Khmelnytska": 0.0,
+    "Cherkaska": 0.5,
+    "Chernihivska": 0.31,
+    "Chernivetska": 0.95,
+    "Kyiv": 0.5,
+    "Avtonomna Respublika Krym": 0.5
 }
 
 @app.route("/")
@@ -101,12 +109,20 @@ danger_data_2= {
 def home():
     # accure_time = datetime.now().time()
     # current_time = re.findall(r'..:..:..', f"{accure_time}")[0]
-    return render_template("alarm_map.html", news_data=news, alarm_data=alarm_data_1, time=current_time, \
+    return render_template("alarm_map.html", news_data=news, alarm_data=alarm_data_1, time=current_time.strftime('%Y-%m-%d %H:%M:%S'), \
                            onpage_map='true', onpage_analytics='false', onpage_help='false', onpage_us='false')
 
 @app.route("/analytics")
 def analytics():
-    return render_template("analytics_map.html", danger_data=danger_data_1, danger_data_1=danger_data_1, danger_data_2=danger_data_2, \
+    min_alerts = 10
+    max_alerts = 700
+    min_shelling = 50
+    max_shelling = 9000
+
+
+    danger_data_1 = count_danger_level.count_color(danger_levels1)
+    danger_data_2 = count_danger_level.count_color(danger_levels2)
+    return render_template("analytics_map.html", danger_data=danger_data_1, danger_data_1=danger_data_1, danger_data_2=danger_data_2,  min_alerts =min_alerts, min_shelling = min_shelling, max_alerts= max_alerts, max_shelling=max_shelling,\
                            onpage_map='false', onpage_analytics='true', onpage_help='false', onpage_us='false')
 
 @app.route("/medical_help")
@@ -152,8 +168,6 @@ def get_alert_data():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
 
 # add_alarm(app, 'b', 'c', 'd', 'e', 'f')

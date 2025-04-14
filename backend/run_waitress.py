@@ -1,10 +1,10 @@
 from waitress import serve
-from app import app, get_data
+from app import app, get_data, update_database
 from threading import Thread
 
 
-data_thread = Thread(target=get_data)
-data_thread.start()
+Thread(target=get_data, daemon=True).start()
+Thread(target=update_database, daemon=True).start()
 
 if __name__ == "__main__":
     serve(app, host='0.0.0.0', port=8000)

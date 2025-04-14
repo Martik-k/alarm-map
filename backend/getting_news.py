@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import re
 import json
 
 
@@ -44,14 +45,16 @@ def get_news():
         news_items = soup.find_all('div', class_='im-tl')
 
         region_news = []
-        for item in news_items[:3]:
+        for item in news_items:
             a_tag = item.find('a')
             if a_tag:
                 title = a_tag.get_text(strip=True)
                 link = a_tag['href']
+                if re.search(r"[ёЁыЫэЭъЪ]", title) is not None:
+                    continue
                 region_news.append(f"{title}::{link}")
 
-        all_news[region_name] = "///".join(region_news)
+        all_news[region_name] = "///".join(region_news[:5])
 
     # with open('news_data.json', 'w', encoding='utf-8') as f:
     #     json.dump(all_news, f, ensure_ascii=False, indent=4)
