@@ -11,7 +11,8 @@ from analytics import (  # change `your_module` to the actual Python filename wi
     calculate_average_duration,
     count_alerts,
     calculate_alert_percentage,
-    get_last_alert_time
+    get_last_alert_time,
+    plot_alert_durations_base64
 )
 
 app = Flask(__name__, static_folder="../frontend/static", template_folder="../frontend")
@@ -122,26 +123,33 @@ def about_us():
 def not_found_error(error):
     return render_template("error_404.html"), "404"
 
+
 @app.route('/api/alert-data', methods=['GET'])
 def get_alert_data():
     region = request.args.get('region')
-    month = int(request.args.get('month'))
-    year = int(request.args.get('year'))
+    range_prop = request.args.get('range')
 
+    print(range_prop)
     region = region.replace("_", " ")
     file_path = 'history_alerts.json'  # adjust path if needed
 
-    avg_duration = calculate_average_duration(region, month, year, file_path)
-    count = count_alerts(region, month, year, file_path)
-    percent = calculate_alert_percentage(region, month, year, file_path)
-    last_alert = get_last_alert_time(region, file_path)
+    try:
+        avg_duration = calculate_average_duration(region, range_prop, file_path)
+        count = count_alerts(region, range_prop, file_path)
+        percent = calculate_alert_percentage(region, range_prop, file_path)
+        last_alert = get_last_alert_time(region, file_path)
+        image_base64 = plot_alert_durations_base64(region, range_prop, file_path)
 
-    return jsonify({
-        'average_duration': avg_duration,
-        'alert_count': count,
-        'alert_percentage': round(percent, 2),
-        'last_alert': last_alert
-    })
+        return jsonify({
+            'average_duration': avg_duration,
+            'alert_count': count,
+            'alert_percentage': round(percent, 2),
+            'last_alert': last_alert,
+            'imageBase64': image_base64
+        })
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
     with app.app_context():

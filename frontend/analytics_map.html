@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
   <head>
     <title>Map</title>
         
@@ -198,22 +198,51 @@
 
     <div id="modal" class="modal">
       <div class="modal-content">
-        <h3 id="regionName"></h3> 
+        <div class="modal-header">
+          <h3 id="regionName"></h3>
+          <button class="close-btn" id="closeModal" aria-label="Закрити">✖</button>
+        </div>
+        
         <div class="popup-buttons">
-          <button>Цей рік</button>
-          <button>Цей місяць</button>
-          <button>Цей тиждень</button>
+          <button data-period="year">Цей рік</button>
+          <button data-period="month">Цей місяць</button>
+          <button data-period="week">Цей тиждень</button>
         </div>
-        <div class="chart"></div>
-        <div class="stats">
-            <p>Середня тривалість тривог: <strong id="avgDuration"></strong></p>
-            <p>Кількість тривог: <strong id="alertCount"></strong></p>
-            <p>Відсоток часу під тривогами за вибраний період часу:<strong id="alertPercentage"></strong></p>
-            <p class="last-alert">Остання тривога: <strong id="lastAlert"></strong></p>
+        
+        <div class="chart-container">
+          <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Завантаження даних...</p>
+          </div>
+          <div class="chart">
+            <img id="chartImage" src="/placeholder.svg" alt="Графік тривог" />
+          </div>
         </div>
-        <button class="close-btn" id="closeModal">✖</button>
+        
+        <div class="stats-container">
+          <div class="stats">
+            <div class="stat-item">
+              <span class="stat-label">Середня тривалість тривог:</span>
+              <strong id="avgDuration" class="stat-value"></strong>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Кількість тривог:</span>
+              <strong id="alertCount" class="stat-value"></strong>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Відсоток часу під тривогами:</span>
+              <strong id="alertPercentage" class="stat-value"></strong>
+            </div>
+          </div>
+          <div class="last-alert-container">
+            <div class="last-alert">
+              <span class="last-alert-label">Остання тривога:</span>
+              <strong id="lastAlert" class="last-alert-value"></strong>
+            </div>
+          </div>
+        </div>
       </div>
-  </div>
+    </div>
 
     
     <script type="application/json" id="danger-data-1">{{ danger_data_1 | tojson }}</script>
