@@ -2,42 +2,11 @@ import base64
 from io import BytesIO
 import json
 from datetime import datetime, timedelta
-import calendar
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 
-def shift_date_by_months(date: datetime, months: int) -> datetime:
-    month = date.month - 1 + months
-    year = date.year + month // 12
-    month = month % 12 + 1
-    day = min(date.day, calendar.monthrange(year, month)[1])
-    return date.replace(year=year, month=month, day=day)
-
-def get_range_bounds(range_prop: str, shift_months: int = 0) -> tuple[datetime, datetime]:
-    """
-    Returns the start and end datetime for the given range_prop ('week', 'month', 'year').
-    You can shift the base date back or forward using shift_months.
-    """
-    now = shift_date_by_months(datetime.now(), shift_months)
-
-    if range_prop == "week":
-        start = now - timedelta(days=now.weekday())
-        end = start + timedelta(days=7)
-    elif range_prop == "month":
-        start = now.replace(day=1)
-        if now.month == 12:
-            end = now.replace(year=now.year + 1, month=1, day=1)
-        else:
-            end = now.replace(month=now.month + 1, day=1)
-    elif range_prop == "year":
-        start = now.replace(month=1, day=1)
-        end = now.replace(year=now.year + 1, month=1, day=1)
-    else:
-        raise ValueError("range_prop must be 'week', 'month', or 'year'")
-
-    return start.replace(tzinfo=None, microsecond=0), end.replace(tzinfo=None, microsecond=0)
 
 def calculate_average_duration(region: str, range_prop: str, file_path: str) -> str:
     start, end = get_range_bounds(range_prop)
@@ -46,6 +15,7 @@ def calculate_average_duration(region: str, range_prop: str, file_path: str) -> 
 
     total_duration = 0
     alert_count = 0
+    print(data)
     for alerts in data.values():
         for alert in alerts:
             if alert.get('location') == region:
