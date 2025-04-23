@@ -1,12 +1,14 @@
+"""
+Scratching news.
+"""
+
 import requests
 from bs4 import BeautifulSoup
 import re
-import json
 
 
-api_id = "25663089"
-api_hash = "fc972277aa436080fedcbf8f669df79f"
-json_file_path = "backend\\news.json"
+API_ID = "25663089"
+API_HASH = "fc972277aa436080fedcbf8f669df79f"
 regions = {
     "Київ": 'https://www.ukr.net/news/kyiv.html',
     "Львів": "https://www.ukr.net/news/lviv.html",
@@ -38,6 +40,21 @@ regions = {
 all_news = {}
 
 def get_news():
+    """
+    Scrapes the latest news headlines and links for each region specified 
+    in the 'regions' dictionary from the ukr.net website.
+
+    It iterates through each region and its URL, sends an HTTP GET request, parses the HTML response
+    using BeautifulSoup, and extracts the titles and links of the top 5 news articles.
+    News titles containing Russian characters are skipped.
+    The extracted news for each region are then stored in the 'all_news' dictionary with the region
+    name as the key and the top 5 news items (title::link) joined by '///' as the value.
+
+    Returns:
+        dict[str, str]: A dictionary where keys are Ukrainian region names and values are strings
+                       containing the top 5 news headlines and their links, separated by '///'.
+                       Each news item is formatted as "title::link".
+    """
     for region_name, region_url in regions.items():
         response = requests.get(region_url)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -55,8 +72,5 @@ def get_news():
                 region_news.append(f"{title}::{link}")
 
         all_news[region_name] = "///".join(region_news[:5])
-
-    # with open('news_data.json', 'w', encoding='utf-8') as f:
-    #     json.dump(all_news, f, ensure_ascii=False, indent=4)
 
     return all_news
