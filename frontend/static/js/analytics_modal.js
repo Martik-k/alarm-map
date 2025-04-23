@@ -181,62 +181,61 @@ openModalButtons.forEach(button => {
           const newPeriod = clickedButton.dataset.period;
           currentPeriod = newPeriod;
 
-          /* Оновити стан активної кнопки */
+       
           buttonContainer.querySelectorAll('button[data-period]').forEach(btn => {
             btn.classList.remove('active');
           });
           clickedButton.classList.add('active');
 
-          /* Отримати дані для нового періоду */
+        
           fetchAndUpdateData(translatedName, newPeriod);
         }
       };
 
-      /* Додати нового слухача */
+    
       buttonContainer.addEventListener('click', currentPeriodButtonListener);
 
-      /* Отримати початкові дані для періоду за замовчуванням */
       fetchAndUpdateData(translatedName, currentPeriod);
     } else {
       console.error("Помилка: Не вдалося знайти елемент з класом 'popup-buttons'.");
       lastAlertElement.textContent = 'Помилка інтерфейсу: кнопки періоду не знайдено.';
     }
 
-    /* Показати модальне вікно */
+    
     modal.classList.add("active");
     document.body.classList.add("modal-open");
   });
 });
 
-/* Слухач подій для закриття модального вікна */
-closeModalButton.addEventListener("click", () => {
+
+closeModal.addEventListener("click", () => {
   modal.classList.remove("active");
   document.body.classList.remove("modal-open");
 
-  /* Очищення при закритті модального вікна */
+ 
   clearModalData();
   if (buttonContainer && currentPeriodButtonListener) {
     buttonContainer.removeEventListener('click', currentPeriodButtonListener);
     currentPeriodButtonListener = null;
   }
 
-  /* Перервати будь-який триваючий запит fetch при закритті модального вікна */
+  
   if (currentFetchController) {
     currentFetchController.abort();
     currentFetchController = null;
   }
 });
 
-/* Закрити модальне вікно при кліку поза його вмістом */
+
 modal.addEventListener("click", (e) => {
   if (e.target === modal) {
-    closeModalButton.click();
+    closeModal.click();
   }
 });
 
-/* Закрити модальне вікно клавішею Escape */
+
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && modal.classList.contains("active")) {
-    closeModalButton.click();
+    closeModal.click();
   }
 });
