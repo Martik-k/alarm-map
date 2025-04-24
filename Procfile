@@ -1,1 +1,1 @@
-web: cd backend && python run_waitress.py
+web: python backend/run_waitress.py
