@@ -2,10 +2,15 @@
 This module updates shelling information by fetching new messages from the '@povitryanatrivogaaa' Telegram channel.
 """
 
+import os
+from dotenv import load_dotenv
 import asyncio
 from datetime import datetime
 from telethon import TelegramClient
-from .privat_info import API_ID, API_HASH
+
+load_dotenv()
+API_ID_TEL = os.getenv("API_ID_TG")
+API_HASH_TEL = os.getenv("API_HASH_TG")
 
 CHANNEL = '@povitryanatrivogaaa'
 
@@ -26,7 +31,7 @@ async def update_messages(last_data:datetime):
                                          - 'message' (str): The text content of the message.
                                          Returns an empty list if no new messages are found.
     """
-    client = TelegramClient('session_name', API_ID, API_HASH)
+    client = TelegramClient('session_name', API_ID_TEL, API_HASH_TEL)
     await client.connect()
 
     new_messages = []

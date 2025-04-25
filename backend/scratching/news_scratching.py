@@ -2,13 +2,17 @@
 Scratching news.
 """
 
+import os
+from dotenv import load_dotenv
 import requests
 from bs4 import BeautifulSoup
 import re
 
+load_dotenv()
+API_ID = os.getenv("API_ID_NEWS")
+API_HASH = os.getenv("API_HASH_NEWS")
 
-API_ID = "25663089"
-API_HASH = "fc972277aa436080fedcbf8f669df79f"
+
 regions = {
     "Київ": 'https://www.ukr.net/news/kyiv.html',
     "Львів": "https://www.ukr.net/news/lviv.html",

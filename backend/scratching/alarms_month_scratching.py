@@ -1,11 +1,14 @@
 """History of alarm."""
 import time
 from alerts_in_ua import Client as AlertsClient
+import os
+from dotenv import load_dotenv
 
-FIRST_TOKEN = "faaab9c185f492913ef2f4e455f4b51321d05266ab2203"
-SECOND_TOKEN = "26ffd55f74e65381554687b9410060cf138e00d4ab2203"
-THIRD_TOKEN = "da59bcd44b1eb7cca154771e058492117d1e58acab2203"
-FOURTH_TOKEN = "d1868fb1c69d1ede30c2cdafcfead73d4bf232eaab2203"
+load_dotenv()
+FIRST_TOKEN = os.getenv("FIRST_API_TOKEN")
+SECOND_TOKEN = os.getenv("SECOND_API_TOKEN")
+THIRD_TOKEN = os.getenv("THIRD_API_TOKEN")
+FORTH_TOKEN = os.getenv("FORTH_API_TOKEN")
 
 LOCATIONS = ["Vinnytska", "Volynska", "Dnipropetrovska", "Donetska", "Zhytomyrska", "Zakarpatska", 
              "Zaporizka", "Ivano-Frankivska", "Kyivska", "Kirovohradska", "Luhanska", 
