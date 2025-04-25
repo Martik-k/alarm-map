@@ -48,7 +48,7 @@ def home():
     """
     return render_template("alarm_map.html", news_data=current_app.updater_alarms_news.news_data,
                            alarm_data=current_app.updater_alarms_news.alerts_data,
-                           time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                           time=datetime.now().strftime('%Y-%m-%d %H:%M:%S')+'------',
                            onpage_map='true', onpage_analytics='false', onpage_help='false',
                            onpage_us='false')
 
