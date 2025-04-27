@@ -89,15 +89,6 @@ def about_us():
                            onpage_map='false', onpage_analytics='false', onpage_help='false',
                            onpage_us='true')
 
-@main.errorhandler(404)
-def not_found_error():
-    """
-    Renders the 'error_404.html' template for 404 errors.
-
-    This function is called when the user tries to access a page that doesn't exist.
-    """
-    return render_template("error_404.html"), "404"
-
 
 @main.route('/api/alert-data', methods=['GET'])
 def get_alert_data():

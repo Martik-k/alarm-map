@@ -1,7 +1,7 @@
 """
 Init for app.
 """
-from flask import Flask
+from flask import Flask, render_template
 from flask_migrate import Migrate
 from database.models import db
 from .routes import main
@@ -31,4 +31,12 @@ def create_app():
     app.updater_shellings = UpdateActiveShellings(app)
     app.updater_analytics = UpdateAnalytics(app)
 
+    @app.errorhandler(404)
+    def not_found_error(error):
+        """
+        Renders the 'error_404.html' template for 404 errors.
+        This function is called when the user tries to access a page that doesn't exist.
+        """
+        return render_template("error_404.html"), 404
+    
     return app
