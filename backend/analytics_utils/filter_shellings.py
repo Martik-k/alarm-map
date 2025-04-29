@@ -36,7 +36,6 @@ def filter_shelling_info(shelling: list):
         "Zakarpatska": ["ужгород", "закарпат"],
         "Zaporizka": ["запоріж", "запорізьк"],
         "Ivano-Frankivska": ["івано-франків", "франківськ"],
-        "Kyivska": ["київська"],
         "Kirovohradska": ["кіровоград", "кропивницьк"],
         "Luhanska": ["луганськ", "сєвєродонецьк"],
         "Lvivska": ["львів", "львівськ"],
@@ -52,7 +51,7 @@ def filter_shelling_info(shelling: list):
         "Cherkaska": ["черкас", "золотоноша", "черкащин"],
         "Chernivetska": ["чернівц", "буковин"],
         "Chernihivska": ["чернігів"],
-        "Kyiv": ["м. київ", "київ"],
+        "Kyivska": ["м. київ", "київ", "київська"],
         "Avtonomna Respublika Krym": ["крим", "симферополь", "ялта"],
     }
 

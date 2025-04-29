@@ -30,12 +30,7 @@ def start_flask():
 if __name__ == "__main__":
     clear_shellings_table(app)
 
-    # month_alerts = get_month_alerts()
-    # for start, finish, location, is_active in month_alerts:
-    #     add_alarm(app, start, finish, location, is_active)
-
     UpdateAnalytics.start_time = datetime.now() - relativedelta(months=1)
-    # sleep(30)
 
     alarms_news_thread = Thread(target=app.updater_alarms_news.update_active_alerts_and_news,
                                 daemon=True)

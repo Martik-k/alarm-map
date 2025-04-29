@@ -192,12 +192,6 @@ def get_alarms_for_period(app, period: str, last_date):
             total_counts_durations[alarm.location][2], alarm_finish
         )
 
-        if alarm.location == "Kyivska":
-            total_counts_durations["Kyiv"][0] += 1
-            total_counts_durations["Kyiv"][1] += alarm_finish - alarm_start
-            total_counts_durations["Kyiv"][2] = max(
-                total_counts_durations["Kyiv"][2], alarm_finish
-            )
 
         for i, start_period in enumerate(start_all_periods[:-1]):
             finish_period = start_all_periods[i + 1]
@@ -210,9 +204,8 @@ def get_alarms_for_period(app, period: str, last_date):
             duration = finish_alarm_period - start_alarm_period
 
             total_counts_durations[alarm.location][3][start_period] += duration
-            if alarm.location == "Kyivska":
-                total_counts_durations["Kyiv"][3][start_period] += duration
-
+        
+        total_counts_durations['Kyiv'] = total_counts_durations['Kyivska']
     return total_counts_durations, start_all_period
 
 

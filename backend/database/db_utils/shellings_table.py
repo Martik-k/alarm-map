@@ -79,4 +79,5 @@ def create_shellings_dictionary(app):
         total_count_shellingws = deepcopy(LOCATIONS_SHELLING_COUNT_DURATION)
         for shelling in shellings:
             total_count_shellingws[shelling.location] += 1
+        total_count_shellingws['Kyiv'] = total_count_shellingws['Kyivska']
     return total_count_shellingws

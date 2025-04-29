@@ -74,9 +74,6 @@ class UpdateActiveShellings:
             time.sleep(30)
 
 
-#(A+B)* -(A*B)
-# (A * -B) + (B * -A)
-
 class UpdateAnalytics:
     """
     A class responsible for periodically calculating and storing various analytics
