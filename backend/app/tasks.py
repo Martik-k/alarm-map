@@ -9,13 +9,12 @@ from analytics_utils.count_danger_level import count_percent_danger
 from analytics_utils.analytics import (calculate_average_duration, count_alerts, calculate_alert_percentage,
                                        get_last_alert_time, plot_analytics_from_dict)
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 
 def get_kyiv_time():
-    now = datetime.now(timezone.utc)
-    dt_local = now.astimezone()
-    dt_naive_local = dt_local.replace(tzinfo=None)
-    return dt_naive_local
+    now_kyiv = datetime.now(ZoneInfo("Europe/Kyiv"))
+    return now_kyiv.replace(tzinfo=None)
 
 
 class UpdateActiveAlertsNews:

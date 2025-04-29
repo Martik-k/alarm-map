@@ -5,6 +5,7 @@ Module for managing and querying alarm data in the database.
 from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta  # потрібно встановити: pip install python-dateutil
 from ..models import db, Alarm
+from zoneinfo import ZoneInfo
 from sqlalchemy import or_
 
 LOCATIONS = ["Vinnytska", "Volynska", "Dnipropetrovska", "Donetska", "Zhytomyrska", "Zakarpatska",
@@ -15,10 +16,8 @@ LOCATIONS = ["Vinnytska", "Volynska", "Dnipropetrovska", "Donetska", "Zhytomyrsk
 
 
 def get_kyiv_time():
-    now = datetime.now(timezone.utc)
-    dt_local = now.astimezone()
-    dt_naive_local = dt_local.replace(tzinfo=None)
-    return dt_naive_local
+    now_kyiv = datetime.now(ZoneInfo("Europe/Kyiv"))
+    return now_kyiv.replace(tzinfo=None)
 
 
 def find_start_period(period: str, end):

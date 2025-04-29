@@ -4,17 +4,16 @@ Analytics.
 
 import base64
 from io import BytesIO
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import matplotlib
 matplotlib.use('Agg')
 
 def get_kyiv_time():
-    now = datetime.now(timezone.utc)
-    dt_local = now.astimezone()
-    dt_naive_local = dt_local.replace(tzinfo=None)
-    return dt_naive_local
+    now_kyiv = datetime.now(ZoneInfo("Europe/Kyiv"))
+    return now_kyiv.replace(tzinfo=None)
 
 def get_range_bounds(range_prop: str):
     """

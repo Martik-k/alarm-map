@@ -1,6 +1,7 @@
 from ..models import db, Shelling
 from datetime import datetime, timezone
 from copy import deepcopy
+from zoneinfo import ZoneInfo
 
 LOCATIONS_SHELLING_COUNT_DURATION = {
     "Vinnytska": 0,
@@ -33,10 +34,8 @@ LOCATIONS_SHELLING_COUNT_DURATION = {
 
 
 def get_kyiv_time():
-    now = datetime.now(timezone.utc)
-    dt_local = now.astimezone()
-    dt_naive_local = dt_local.replace(tzinfo=None)
-    return dt_naive_local
+    now_kyiv = datetime.now(ZoneInfo("Europe/Kyiv"))
+    return now_kyiv.replace(tzinfo=None)
 
 
 def clear_shellings_table(app):

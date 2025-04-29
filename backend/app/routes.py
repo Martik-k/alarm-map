@@ -4,6 +4,7 @@ Routes.
 
 from datetime import datetime, timezone
 from flask import Blueprint, render_template, request, jsonify, current_app
+from zoneinfo import ZoneInfo
 
 TRANSLATE_LOCATION = {
     "Вінницька область": "Vinnytska",
@@ -35,11 +36,10 @@ TRANSLATE_LOCATION = {
 }
 
 
+
 def get_kyiv_time():
-    now = datetime.now(timezone.utc)
-    dt_local = now.astimezone()
-    dt_naive_local = dt_local.replace(tzinfo=None)
-    return dt_naive_local
+    now_kyiv = datetime.now(ZoneInfo("Europe/Kyiv"))
+    return now_kyiv.replace(tzinfo=None)
 
 
 main = Blueprint('main', __name__)
