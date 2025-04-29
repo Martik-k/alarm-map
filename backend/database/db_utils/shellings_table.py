@@ -1,5 +1,5 @@
 from ..models import db, Shelling
-from datetime import datetime
+from datetime import datetime, timezone
 from copy import deepcopy
 
 LOCATIONS_SHELLING_COUNT_DURATION = {
@@ -30,6 +30,14 @@ LOCATIONS_SHELLING_COUNT_DURATION = {
     "Kyiv": 0,
     "Avtonomna Respublika Krym": 0
 }
+
+
+def get_kyiv_time():
+    now = datetime.now(timezone.utc)
+    dt_local = now.astimezone()
+    dt_naive_local = dt_local.replace(tzinfo=None)
+    return dt_naive_local
+
 
 def clear_shellings_table(app):
     """
@@ -74,7 +82,7 @@ def create_shellings_dictionary(app):
                        location for the current month (int).
     """
     with app.app_context():
-        start_period = datetime.now().replace(day=1)
+        start_period = get_kyiv_time().replace(day=1)
         shellings = Shelling.query.filter(Shelling.time > start_period).all()
         total_count_shellingws = deepcopy(LOCATIONS_SHELLING_COUNT_DURATION)
         for shelling in shellings:

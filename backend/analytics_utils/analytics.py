@@ -4,12 +4,17 @@ Analytics.
 
 import base64
 from io import BytesIO
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import matplotlib
 matplotlib.use('Agg')
 
+def get_kyiv_time():
+    now = datetime.now(timezone.utc)
+    dt_local = now.astimezone()
+    dt_naive_local = dt_local.replace(tzinfo=None)
+    return dt_naive_local
 
 def get_range_bounds(range_prop: str):
     """
@@ -24,7 +29,7 @@ def get_range_bounds(range_prop: str):
     Raises:
         ValueError: If an invalid range_prop is provided.
     """
-    end = datetime.now()
+    end = get_kyiv_time()
     if range_prop == "week":
         start = end - timedelta(weeks=1)
     elif range_prop == "month":
@@ -102,7 +107,7 @@ def calculate_alert_percentage(range_prop: str,  lst_region: dict, start_alarms,
         float: The percentage of time an alert was active (0.0 to 100.0).
     """
     start = start_dictionary[range_prop]
-    end = datetime.now()
+    end = get_kyiv_time()
     end = end.replace(hour=0 ,minute=0, second=0)
     start = max(start, start_alarms) if start_alarms else start
     total_seconds = (end - start).total_seconds()

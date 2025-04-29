@@ -2,7 +2,7 @@
 Routes.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from flask import Blueprint, render_template, request, jsonify, current_app
 
 TRANSLATE_LOCATION = {
@@ -34,6 +34,14 @@ TRANSLATE_LOCATION = {
     "Автономна Республіка Крим": "Avtonomna Respublika Krym"
 }
 
+
+def get_kyiv_time():
+    now = datetime.now(timezone.utc)
+    dt_local = now.astimezone()
+    dt_naive_local = dt_local.replace(tzinfo=None)
+    return dt_naive_local
+
+
 main = Blueprint('main', __name__)
 
 @main.route("/")
@@ -48,7 +56,7 @@ def home():
     """
     return render_template("alarm_map.html", news_data=current_app.updater_alarms_news.news_data,
                            alarm_data=current_app.updater_alarms_news.alerts_data,
-                           time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                           time=get_kyiv_time().strftime('%Y-%m-%d %H:%M:%S'),
                            onpage_map='true', onpage_analytics='false', onpage_help='false',
                            onpage_us='false')
 

@@ -2,7 +2,7 @@
 Module for managing and querying alarm data in the database.
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta  # потрібно встановити: pip install python-dateutil
 from ..models import db, Alarm
 from sqlalchemy import or_
@@ -12,6 +12,13 @@ LOCATIONS = ["Vinnytska", "Volynska", "Dnipropetrovska", "Donetska", "Zhytomyrsk
              "Lvivska", "Mykolaivska", "Odeska", "Poltavska", "Rivnenska", "Sumska",
              "Ternopilska", "Kharkivska", "Khersonska", "Khmelnytska", "Cherkaska",
              "Chernihivska", "Chernivetska", "Kyiv", "Avtonomna Respublika Krym", "Kyiv"]
+
+
+def get_kyiv_time():
+    now = datetime.now(timezone.utc)
+    dt_local = now.astimezone()
+    dt_naive_local = dt_local.replace(tzinfo=None)
+    return dt_naive_local
 
 
 def find_start_period(period: str, end):
@@ -160,7 +167,7 @@ def get_alarms_for_period(app, period: str, last_date):
     """
     Retrieves the count and total duration of alarms for each location within a given period.
     """
-    now = datetime.now()
+    now = get_kyiv_time()
     end = now.replace(hour=0, minute=0, second=0, microsecond=0)
     start_all_periods = get_all_periods_starts(period, end)
     start_all_period = start_all_periods[0]

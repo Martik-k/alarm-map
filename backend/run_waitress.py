@@ -2,7 +2,7 @@
 Run server.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from dateutil.relativedelta import relativedelta
 from time import sleep
 from threading import Thread
@@ -15,6 +15,12 @@ from scratching.alarms_month_scratching import get_month_alerts
 from app.tasks import UpdateAnalytics
 
 app: Flask = create_app()
+
+def get_kyiv_time():
+    now = datetime.now(timezone.utc)
+    dt_local = now.astimezone()
+    dt_naive_local = dt_local.replace(tzinfo=None)
+    return dt_naive_local
 
 def start_flask():
     """
@@ -30,7 +36,7 @@ def start_flask():
 if __name__ == "__main__":
     clear_shellings_table(app)
 
-    UpdateAnalytics.start_time = datetime.now() - relativedelta(months=1)
+    UpdateAnalytics.start_time = get_kyiv_time() - relativedelta(months=1)
 
     alarms_news_thread = Thread(target=app.updater_alarms_news.update_active_alerts_and_news,
                                 daemon=True)

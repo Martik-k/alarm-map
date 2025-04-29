@@ -8,7 +8,14 @@ from analytics_utils.filter_shellings import filter_shelling_info
 from analytics_utils.count_danger_level import count_percent_danger
 from analytics_utils.analytics import (calculate_average_duration, count_alerts, calculate_alert_percentage,
                                        get_last_alert_time, plot_analytics_from_dict)
-from datetime import datetime
+from datetime import datetime, timezone
+
+
+def get_kyiv_time():
+    now = datetime.now(timezone.utc)
+    dt_local = now.astimezone()
+    dt_naive_local = dt_local.replace(tzinfo=None)
+    return dt_naive_local
 
 
 class UpdateActiveAlertsNews:
@@ -38,7 +45,7 @@ class UpdateActiveAlertsNews:
             self.alerts_data = get_active_alerts()
             # if UpdateAnalytics.start_time == datetime(2022, 1, 1, 0, 0, 0):
             #     UpdateAnalytics.start_time = datetime.now()
-            process_alarm_data(self.app, self.alerts_data, datetime.now())
+            process_alarm_data(self.app, self.alerts_data, get_kyiv_time())
             self.news_data = get_news()
             print('Alarms and news updated')
             time.sleep(30)
@@ -69,7 +76,7 @@ class UpdateActiveShellings:
             data = get_shellings(self.last_data)
             shellings_data = filter_shelling_info(data)
             process_shelling_data(self.app, shellings_data)
-            self.last_data = datetime.now()
+            self.last_data = get_kyiv_time
             print('Shellings updated')
             time.sleep(30)
 
