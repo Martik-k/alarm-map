@@ -63,6 +63,7 @@ class UpdateActiveShellings:
         """
         self.app = app
         self.last_data = datetime.strptime("2025-04-17 10:00:00", "%Y-%m-%d %H:%M:%S")
+        self.now = None
 
     def update_active_shellings(self):
         """
@@ -71,12 +72,14 @@ class UpdateActiveShellings:
         after each update.
         """
         while True:
-            # process_shelling_data(active_shellings, current_time)
-            data = get_shellings(self.last_data)
-            shellings_data = filter_shelling_info(data)
-            process_shelling_data(self.app, shellings_data)
-            self.last_data = get_kyiv_time
-            print('Shellings updated')
+            self.now = get_kyiv_time()
+            if self.now.hour == 1 and self.now.minute == 20:
+                # process_shelling_data(active_shellings, current_time)
+                data = get_shellings(self.last_data)
+                shellings_data = filter_shelling_info(data)
+                process_shelling_data(self.app, shellings_data)
+                self.last_data = get_kyiv_time
+                print('Shellings updated')
             time.sleep(30)
 
 
@@ -94,6 +97,7 @@ class UpdateAnalytics:
             app (Flask): The Flask application instance.
         """
         self.app = app
+        self.now = None
         self.last_data = datetime.strptime("2025-04-17 10:00:00", "%Y-%m-%d %H:%M:%S")
         self.shellings_min = 0
         self.shellings_max = 0
@@ -117,36 +121,38 @@ class UpdateAnalytics:
         (week, month, year). It sleeps for 60 seconds after each update.
         """
         while True:
-            shellings_month_data = create_shellings_dictionary(self.app)
-            self.shellings_max = max(shellings_month_data.values())
-            self.shellings_min = min(shellings_month_data.values())
-            self.shellings_colors = \
-                count_percent_danger(shellings_month_data)
+            self.now = get_kyiv_time()
+            if self.now.hour == 1 and self.now.minute == 30:
+                shellings_month_data = create_shellings_dictionary(self.app)
+                self.shellings_max = max(shellings_month_data.values())
+                self.shellings_min = min(shellings_month_data.values())
+                self.shellings_colors = \
+                    count_percent_danger(shellings_month_data)
 
-            alarms_dictionary, starts_dictionary = create_alarms_dictionary(self.app, UpdateAnalytics.start_time)
+                alarms_dictionary, starts_dictionary = create_alarms_dictionary(self.app, UpdateAnalytics.start_time)
 
-            alarms_month_count_data = {location: lst[0]
-                                 for location, lst in alarms_dictionary['month'].items()}
-            self.alarms_max = max(alarms_month_count_data.values())
-            self.alarms_min = min(alarms_month_count_data.values())
-            alarms_month_data = {location: lst[1]
-                                 for location, lst in alarms_dictionary['month'].items()}
-            self.alarms_colors = \
-                count_percent_danger(alarms_month_data)
+                alarms_month_count_data = {location: lst[0]
+                                    for location, lst in alarms_dictionary['month'].items()}
+                self.alarms_max = max(alarms_month_count_data.values())
+                self.alarms_min = min(alarms_month_count_data.values())
+                alarms_month_data = {location: lst[1]
+                                    for location, lst in alarms_dictionary['month'].items()}
+                self.alarms_colors = \
+                    count_percent_danger(alarms_month_data)
 
-            for time_range in ['week', 'month', 'year']:
-                for region, _ in alarms_dictionary[time_range].items():
-                    self.avg_duration_dict[time_range][region] = \
-                        calculate_average_duration(alarms_dictionary[time_range][region])
-                    self.count_dict[time_range][region] = \
-                        count_alerts(alarms_dictionary[time_range][region])
-                    self.percent_dict[time_range][region] = \
-                        calculate_alert_percentage(time_range,
-                                                   alarms_dictionary[time_range][region],
-                                                   UpdateAnalytics.start_time, starts_dictionary)
-                    self.last_alert_dict[time_range][region] = \
-                        get_last_alert_time(alarms_dictionary[time_range][region])
-                    self.image_base64_dict[time_range][region] = \
-                    plot_analytics_from_dict(alarms_dictionary, time_range, region, UpdateAnalytics.start_time)
-            print('Analytics updated')
-            time.sleep(60)
+                for time_range in ['week', 'month', 'year']:
+                    for region, _ in alarms_dictionary[time_range].items():
+                        self.avg_duration_dict[time_range][region] = \
+                            calculate_average_duration(alarms_dictionary[time_range][region])
+                        self.count_dict[time_range][region] = \
+                            count_alerts(alarms_dictionary[time_range][region])
+                        self.percent_dict[time_range][region] = \
+                            calculate_alert_percentage(time_range,
+                                                    alarms_dictionary[time_range][region],
+                                                    UpdateAnalytics.start_time, starts_dictionary)
+                        self.last_alert_dict[time_range][region] = \
+                            get_last_alert_time(alarms_dictionary[time_range][region])
+                        self.image_base64_dict[time_range][region] = \
+                        plot_analytics_from_dict(alarms_dictionary, time_range, region, UpdateAnalytics.start_time)
+                print('Analytics updated')
+            time.sleep(30)
