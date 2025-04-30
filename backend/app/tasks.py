@@ -72,7 +72,7 @@ class UpdateActiveShellings:
             data = get_shellings(self.last_data)
             shellings_data = filter_shelling_info(data)
             process_shelling_data(self.app, shellings_data)
-            self.last_data = get_kyiv_time()
+            self.last_data = self.now
             print('Shellings updated')
             time.sleep(60)
 
