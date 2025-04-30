@@ -9,7 +9,6 @@ from analytics_utils.count_danger_level import count_percent_danger
 from analytics_utils.analytics import (calculate_average_duration, count_alerts, calculate_alert_percentage,
                                        get_last_alert_time, plot_analytics_from_dict)
 from datetime import datetime
-from zoneinfo import ZoneInfo
 from app.const import get_kyiv_time
 
 
@@ -43,7 +42,7 @@ class UpdateActiveAlertsNews:
             process_alarm_data(self.app, self.alerts_data, get_kyiv_time())
             self.news_data = get_news()
             print('Alarms and news updated')
-            time.sleep(60)
+            time.sleep(30)
 
 
 class UpdateActiveShellings:
