@@ -47,7 +47,7 @@ class UpdateActiveAlertsNews:
             process_alarm_data(self.app, self.alerts_data, get_kyiv_time())
             self.news_data = get_news()
             print('Alarms and news updated')
-            time.sleep(30)
+            time.sleep(60)
 
 
 class UpdateActiveShellings:
@@ -73,14 +73,14 @@ class UpdateActiveShellings:
         """
         while True:
             self.now = get_kyiv_time()
-            if self.now.hour == 12 and self.now.minute == 20:
+            if self.now.hour == 13 and self.now.minute == 10:
                 # process_shelling_data(active_shellings, current_time)
                 data = get_shellings(self.last_data)
                 shellings_data = filter_shelling_info(data)
                 process_shelling_data(self.app, shellings_data)
                 self.last_data = get_kyiv_time
                 print('Shellings updated')
-            time.sleep(30)
+            time.sleep(60)
 
 
 class UpdateAnalytics:
@@ -122,7 +122,7 @@ class UpdateAnalytics:
         """
         while True:
             self.now = get_kyiv_time()
-            if self.now.hour == 12 and self.now.minute == 25:
+            if self.now.hour == 13 and self.now.minute == 15:
                 shellings_month_data = create_shellings_dictionary(self.app)
                 self.shellings_max = max(shellings_month_data.values())
                 self.shellings_min = min(shellings_month_data.values())
