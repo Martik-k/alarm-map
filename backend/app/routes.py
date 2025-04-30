@@ -2,44 +2,8 @@
 Routes.
 """
 
-from datetime import datetime
-from zoneinfo import ZoneInfo
 from flask import Blueprint, render_template, request, jsonify, current_app
-
-TRANSLATE_LOCATION = {
-    "Вінницька область": "Vinnytska",
-    "Волинська область": "Volynska",
-    "Дніпропетровська область": "Dnipropetrovska",
-    "Донецька область": "Donetska",
-    "Житомирська область": "Zhytomyrska",
-    "Закарпатська область": "Zakarpatska",
-    "Запорізька область": "Zaporizka",
-    "Івано-Франківська область": "Ivano-Frankivska",
-    "Київська область": "Kyivska",
-    "Кіровоградська область": "Kirovohradska",
-    "Луганська область": "Luhanska",
-    "Львівська область": "Lvivska",
-    "Миколаївська область": "Mykolaivska",
-    "Одеська область": "Odeska",
-    "Полтавська область": "Poltavska",
-    "Рівненська область": "Rivnenska",
-    "Сумська область": "Sumska",
-    "Тернопільська область": "Ternopilska",
-    "Харківська область": "Kharkivska",
-    "Херсонська область": "Khersonska",
-    "Хмельницька область": "Khmelnytska",
-    "Черкаська область": "Cherkaska",
-    "Чернігівська область": "Chernihivska",
-    "Чернівецька область": "Chernivetska",
-    "м. Київ": "Kyiv",
-    "м. Київ область": "Kyiv",
-    "Автономна Республіка Крим": "Avtonomna Respublika Krym"
-}
-
-
-def get_kyiv_time():
-    now_kyiv = datetime.now(ZoneInfo("Europe/Kyiv"))
-    return now_kyiv.replace(tzinfo=None)
+from app.const import coordinates, get_kyiv_time, TRANSLATE_LOCATION
 
 
 main = Blueprint('main', __name__)
@@ -57,6 +21,7 @@ def home():
     return render_template("alarm_map.html", news_data=current_app.updater_alarms_news.news_data,
                            alarm_data=current_app.updater_alarms_news.alerts_data,
                            time=get_kyiv_time().strftime('%Y-%m-%d %H:%M:%S'),
+                           coordinates=coordinates,
                            onpage_map='true', onpage_analytics='false', onpage_help='false',
                            onpage_us='false')
 
@@ -76,6 +41,7 @@ def analytics():
                            min_shelling = current_app.updater_analytics.shellings_min,
                            max_alerts= current_app.updater_analytics.alarms_max,
                            max_shelling=current_app.updater_analytics.shellings_max,
+                           coordinates=coordinates,
                            onpage_map='false', onpage_analytics='true', onpage_help='false',
                            onpage_us='false')
 

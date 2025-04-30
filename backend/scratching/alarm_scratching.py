@@ -1,35 +1,6 @@
 import os
 from alerts_in_ua import Client as AlertsClient
-
-TRANSLATE_LOCATION = {
-    "Вінницька область": "Vinnytska",
-    "Волинська область": "Volynska",
-    "Дніпропетровська область": "Dnipropetrovska",
-    "Донецька область": "Donetska",
-    "Житомирська область": "Zhytomyrska",
-    "Закарпатська область": "Zakarpatska",
-    "Запорізька область": "Zaporizka",
-    "Івано-Франківська область": "Ivano-Frankivska",
-    "Київська область": "Kyivska",
-    "Кіровоградська область": "Kirovohradska",
-    "Луганська область": "Luhanska",
-    "Львівська область": "Lvivska",
-    "Миколаївська область": "Mykolaivska",
-    "Одеська область": "Odeska",
-    "Полтавська область": "Poltavska",
-    "Рівненська область": "Rivnenska",
-    "Сумська область": "Sumska",
-    "Тернопільська область": "Ternopilska",
-    "Харківська область": "Kharkivska",
-    "Херсонська область": "Khersonska",
-    "Хмельницька область": "Khmelnytska",
-    "Черкаська область": "Cherkaska",
-    "Чернігівська область": "Chernihivska",
-    "Чернівецька область": "Chernivetska",
-    "м. Київ": "Kyiv",
-    "м. Київ область": "Kyiv",
-    "Автономна Республіка Крим": "Avtonomna Respublika Krym"
-}
+from app.const import TRANSLATE_LOCATION
 
 TRANSLATE_ALARMS = {"no_alert": "notalarm",
                     "active": "alarm", 

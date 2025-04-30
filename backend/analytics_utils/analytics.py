@@ -4,16 +4,13 @@ Analytics.
 
 import base64
 from io import BytesIO
-from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
+from datetime import timedelta
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
+from app.const import get_kyiv_time, TRANSLATE_LOCATION
 import matplotlib
 matplotlib.use('Agg')
 
-def get_kyiv_time():
-    now_kyiv = datetime.now(ZoneInfo("Europe/Kyiv"))
-    return now_kyiv.replace(tzinfo=None)
 
 def get_range_bounds(range_prop: str):
     """
@@ -91,6 +88,7 @@ def count_alerts(lst_region) -> int:
     
     return lst_region[0]
 
+
 def calculate_alert_percentage(range_prop: str,  lst_region: dict, start_alarms, start_dictionary) -> float:
     """
     Calculates the percentage of time an alert was active within a given range.
@@ -134,35 +132,6 @@ def get_last_alert_time(lst_region) -> str:
     """
     return lst_region[2]
 
-
-TRANSLATE_LOCATION = {
-    "Vinnytska": "Вінницька область",
-    "Volynska": "Волинська область",
-    "Dnipropetrovska": "Дніпропетровська область",
-    "Donetska": "Донецька область",
-    "Zhytomyrska": "Житомирська область",
-    "Zakarpatska": "Закарпатська область",
-    "Zaporizka": "Запорізька область",
-    "Ivano-Frankivska": "Івано-Франківська область",
-    "Kyivska": "Київська область",
-    "Kirovohradska": "Кіровоградська область",
-    "Luhanska": "Луганська область",
-    "Lvivska": "Львівська область",
-    "Mykolaivska": "Миколаївська область",
-    "Odeska": "Одеська область",
-    "Poltavska": "Полтавська область",
-    "Rivnenska": "Рівненська область",
-    "Sumska": "Сумська область",
-    "Ternopilska": "Тернопільська область",
-    "Kharkivska": "Харківська область",
-    "Khersonska": "Херсонська область",
-    "Khmelnytska": "Хмельницька область",
-    "Cherkaska": "Черкаська область",
-    "Chernihivska": "Чернігівська область",
-    "Chernivetska": "Чернівецька область",
-    "Kyiv": "м. Київ",
-    "Avtonomna Respublika Krym": "Автономна Республіка Крим"
-}
 
 def plot_analytics_from_dict(analytics_dict, range_prop, region, last_date):
    
