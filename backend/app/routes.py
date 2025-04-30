@@ -2,9 +2,9 @@
 Routes.
 """
 
-from datetime import datetime, timezone
-from flask import Blueprint, render_template, request, jsonify, current_app
+from datetime import datetime
 from zoneinfo import ZoneInfo
+from flask import Blueprint, render_template, request, jsonify, current_app
 
 TRANSLATE_LOCATION = {
     "Вінницька область": "Vinnytska",
@@ -34,7 +34,6 @@ TRANSLATE_LOCATION = {
     "м. Київ": "Kyiv",
     "Автономна Республіка Крим": "Avtonomna Respublika Krym"
 }
-
 
 
 def get_kyiv_time():

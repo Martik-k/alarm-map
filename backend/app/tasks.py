@@ -8,7 +8,7 @@ from analytics_utils.filter_shellings import filter_shelling_info
 from analytics_utils.count_danger_level import count_percent_danger
 from analytics_utils.analytics import (calculate_average_duration, count_alerts, calculate_alert_percentage,
                                        get_last_alert_time, plot_analytics_from_dict)
-from datetime import datetime, timezone
+from datetime import datetime
 from zoneinfo import ZoneInfo
 
 
@@ -73,7 +73,7 @@ class UpdateActiveShellings:
         """
         while True:
             self.now = get_kyiv_time()
-            if self.now.hour == 13 and self.now.minute == 10:
+            if self.now.hour == 18 and self.now.minute == 30:
                 # process_shelling_data(active_shellings, current_time)
                 data = get_shellings(self.last_data)
                 shellings_data = filter_shelling_info(data)
@@ -122,14 +122,15 @@ class UpdateAnalytics:
         """
         while True:
             self.now = get_kyiv_time()
-            if self.now.hour == 13 and self.now.minute == 15:
+            if self.now.hour == 18 and self.now.minute == 32:
                 shellings_month_data = create_shellings_dictionary(self.app)
                 self.shellings_max = max(shellings_month_data.values())
                 self.shellings_min = min(shellings_month_data.values())
                 self.shellings_colors = \
                     count_percent_danger(shellings_month_data)
 
-                alarms_dictionary, starts_dictionary = create_alarms_dictionary(self.app, UpdateAnalytics.start_time)
+                alarms_dictionary, starts_dictionary = create_alarms_dictionary(self.app,
+                                                                                UpdateAnalytics.start_time)
 
                 alarms_month_count_data = {location: lst[0]
                                     for location, lst in alarms_dictionary['month'].items()}
@@ -153,6 +154,7 @@ class UpdateAnalytics:
                         self.last_alert_dict[time_range][region] = \
                             get_last_alert_time(alarms_dictionary[time_range][region])
                         self.image_base64_dict[time_range][region] = \
-                        plot_analytics_from_dict(alarms_dictionary, time_range, region, UpdateAnalytics.start_time)
+                        plot_analytics_from_dict(alarms_dictionary, time_range, region,
+                                                 UpdateAnalytics.start_time)
                 print('Analytics updated')
             time.sleep(30)
