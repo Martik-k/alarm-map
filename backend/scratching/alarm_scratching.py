@@ -27,6 +27,7 @@ TRANSLATE_LOCATION = {
     "Чернігівська область": "Chernihivska",
     "Чернівецька область": "Chernivetska",
     "м. Київ": "Kyiv",
+    "м. Київ область": "Kyiv",
     "Автономна Республіка Крим": "Avtonomna Respublika Krym"
 }
 
