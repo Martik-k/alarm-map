@@ -73,7 +73,7 @@ class UpdateActiveShellings:
         """
         while True:
             self.now = get_kyiv_time()
-            if self.now.hour == 18 and self.now.minute == 48:
+            if self.now.hour == 20 and self.now.minute == 00:
                 # process_shelling_data(active_shellings, current_time)
                 data = get_shellings(self.last_data)
                 shellings_data = filter_shelling_info(data)
@@ -122,7 +122,7 @@ class UpdateAnalytics:
         """
         while True:
             self.now = get_kyiv_time()
-            if self.now.hour == 18 and self.now.minute == 50:
+            if self.now.hour == 20 and self.now.minute == 2:
                 shellings_month_data = create_shellings_dictionary(self.app)
                 self.shellings_max = max(shellings_month_data.values())
                 self.shellings_min = min(shellings_month_data.values())
