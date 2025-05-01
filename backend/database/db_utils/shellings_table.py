@@ -83,8 +83,8 @@ def create_shellings_dictionary(app):
     with app.app_context():
         start_period = get_kyiv_time().replace(day=1)
         shellings = Shelling.query.filter(Shelling.time > start_period).all()
-        total_count_shellingws = deepcopy(LOCATIONS_SHELLING_COUNT_DURATION)
+        total_count_shellings = deepcopy(LOCATIONS_SHELLING_COUNT_DURATION)
         for shelling in shellings:
-            total_count_shellingws[shelling.location] += 1
-        total_count_shellingws['Kyiv'] = total_count_shellingws['Kyivska']
-    return total_count_shellingws
+            total_count_shellings[shelling.location] += 1
+        total_count_shellings['Kyiv'] = total_count_shellings['Kyivska']
+    return total_count_shellings
