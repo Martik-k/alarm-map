@@ -2,20 +2,15 @@
 Run server.
 """
 
-from datetime import datetime, timezone
-from dateutil.relativedelta import relativedelta
-from time import sleep
+import time
 from threading import Thread
+from dateutil.relativedelta import relativedelta
 from waitress import serve
-from app import create_app
 from flask import Flask
-from database.db_utils.alarms_table import clear_alarms_table, add_alarm
 from database.db_utils.shellings_table import clear_shellings_table
-from scratching.alarms_month_scratching import get_month_alerts
+from app import create_app
 from app.tasks import UpdateAnalytics
 from app.const import get_kyiv_time
-
-
 app: Flask = create_app()
 
 
@@ -41,6 +36,8 @@ if __name__ == "__main__":
 
     shellings_thread = Thread(target=app.updater_shellings.update_active_shellings, daemon=True)
     shellings_thread.start()
+
+    time.sleep(120)
 
     analytics_tread = Thread(target=app.updater_analytics.update_active_analytics, daemon=True)
     analytics_tread.start()

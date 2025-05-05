@@ -74,7 +74,7 @@ class UpdateActiveShellings:
             process_shelling_data(self.app, shellings_data)
             self.last_data = self.now
             print('Shellings updated')
-            time.sleep(120)
+            time.sleep(1800)
 
 
 class UpdateAnalytics:
@@ -150,4 +150,4 @@ class UpdateAnalytics:
                     plot_analytics_from_dict(alarms_dictionary, time_range, region,
                                                 UpdateAnalytics.start_time)
             print('Analytics updated')
-            time.sleep(120)
+            time.sleep(1800)
