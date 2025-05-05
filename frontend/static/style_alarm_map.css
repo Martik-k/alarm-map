@@ -293,13 +293,13 @@ svg:active {
         margin-bottom: 14px;
         font-size: 27px;
         color: white;
-        width: 20%;
+        width: 30%;
       }
       
       .update-time ul {
         list-style: none;
         padding: 0;
-        width: 20%;
+        width: 30%;
       }
       
       .update-time ul li {
@@ -308,12 +308,12 @@ svg:active {
         margin-bottom: 7px;
         font-size: 1rem; /* 16px */
         color: white;
-        width: 20%;
+        width: 30%;
       }
       
       .update-time span {
         display: inline-block;
-        width: 20%;
+        width: 30%;
         height: 40px;
         margin-right: 12px;
         color: white;
