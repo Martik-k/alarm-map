@@ -37,7 +37,7 @@ if __name__ == "__main__":
     shellings_thread = Thread(target=app.updater_shellings.update_active_shellings, daemon=True)
     shellings_thread.start()
 
-    time.sleep(120)
+    time.sleep(200)
 
     analytics_tread = Thread(target=app.updater_analytics.update_active_analytics, daemon=True)
     analytics_tread.start()
